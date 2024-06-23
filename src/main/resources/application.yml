@@ -1,8 +1,7 @@
 spring:
   application:
     name: auth-service
-  jwt:
-    secret: vzxvgsjdgdfjgfdskgjdsfkgjdsfkgkdsfgjdfkgjdfsgdklgjadgslkjgsaklj
+
 
   datasource:
     url: jdbc:mysql://133.186.241.167:3306/be6_supernova_dev
@@ -14,10 +13,24 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
 
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
+jwt:
+  header: Authorization
+  secret: vzxvgsjdgdfjgfdskgjdsfkgjdsfkgkdsfgjdfkgjdfsgdklgjadgslkjgsaklj
+  token-validity-in-seconds: 86400 # ttl (?)
+
+
+
+server:
+  port: 8778
