@@ -31,12 +31,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 		// 	return new CustomUserDetails(userData);
 		// }
 
-		String response = webClient.post()
-			.uri("/login")
-			.bodyValue(loginMemberRequest)
-			.retrieve()
-			.bodyToMono(String.class)
-			.block();
+		// String response = webClient.post()
+		// 	.uri("/login")
+		// 	.bodyValue(loginMemberRequest)
+		// 	.retrieve()
+		// 	.bodyToMono(String.class)
+		// 	.block();
 
 		return null;
 	}
