@@ -9,12 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import store.novabook.auth.jwt.JWTUtil;
-import store.novabook.auth.jwt.JWTFilter;
-import store.novabook.auth.jwt.JWTUtil;
-import store.novabook.auth.jwt.LoginFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,12 +17,12 @@ public class SecurityConfig {
 	//AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
 	private final AuthenticationConfiguration authenticationConfiguration;
 
-	private final JWTUtil jwtUtil;
+	// private final JWTUtil jwtUtil;
 
-	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
+	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
 
 		this.authenticationConfiguration = authenticationConfiguration;
-		this.jwtUtil = jwtUtil;
+		// this.jwtUtil = jwtUtil;
 	}
 
 	//AuthenticationManager Bean 등록
@@ -47,8 +41,8 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-		LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
-		loginFilter.setFilterProcessesUrl("/auth/login1312321321321313123");
+		// LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
+		// loginFilter.setFilterProcessesUrl("/auth/login1312321321321313123");
 
 		http
 			.csrf((auth) -> auth.disable());
