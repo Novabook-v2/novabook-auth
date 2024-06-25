@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import store.novabook.auth.dto.CustomUserDetails;
 import store.novabook.auth.entity.Member;
+import store.novabook.auth.entity.Member2;
 
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -65,7 +66,7 @@ public class JWTFilter extends OncePerRequestFilter {
 		// userEntity.setRole(role);
 
 		//UserDetails에 회원 정보 객체 담기
-		CustomUserDetails customUserDetails = new CustomUserDetails(Member.builder().build());
+		CustomUserDetails customUserDetails = new CustomUserDetails(new Member2());
 
 		//스프링 시큐리티 인증 토큰 생성
 		Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null,

@@ -3,6 +3,8 @@ package store.novabook.auth.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,26 +14,64 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import reactor.core.publisher.Mono;
+import store.novabook.auth.config.ApiResponse;
 import store.novabook.auth.dto.CustomUserDetails;
+import store.novabook.auth.dto.FindMemberLoginResponse;
+import store.novabook.auth.dto.FindMemberRequest;
 import store.novabook.auth.entity.Member;
+import store.novabook.auth.entity.Member2;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
 	// private final UserRepository userRepository;
-	private final WebClient webClient;
+	// private final WebClient webClient;
+	private final CustomUserDetailClient customUserDetailClient;
 
-	public CustomUserDetailsService(WebClient.Builder webClientBuilder) {
-		this.webClient = webClientBuilder.baseUrl("http://127.0.0.1:9777/api/v1/store/members").build();
+	public CustomUserDetailsService(CustomUserDetailClient customUserDetailClient) {
+		// this.webClient = webClientBuilder.baseUrl("http://127.0.0.1:9777/api/v1/store/members").build();
+		this.customUserDetailClient = customUserDetailClient;
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		webClient.get()
-			.uri("/login")
-			.retrieve()
-			.bodyToMono(String.class)
-			.block();
+		FindMemberRequest findMemberRequest = new FindMemberRequest(username);
+		// String response = webClient.post()
+		// 	.uri("/find")
+		// 	.bodyValue(findMemberRequest)
+		// 	.retrieve()
+		// 	.bodyToMono(String.class)
+		// 	.block();
+
+		ApiResponse<FindMemberLoginResponse> findMemberLoginResponseResponseEntity = customUserDetailClient.find(
+			findMemberRequest);
+
+		// {"body":{"loginId":"1","password":"$2a$12$upR0O26.wR3mfB7YUBScYuSPE5ESv01xvPbYYeJUsgrVyp1PiQ/sO","role":null},"header":{"isSuccessful":true,"resultMessage":"SUCCESS"}}
+
+		// ApiResponse<FindMemberLoginResponse> response2 = webClient.post()
+		// 	.uri("/find")
+		// 	.bodyValue(findMemberRequest)
+		// 	.retrieve()
+		// 	.bodyToMono(FindMemberLoginResponse.class)
+		// 	.block();
+
+		// Member2 member = webClient.post()
+		// 	.uri("/find", username)
+		// 	.bodyValue(findMemberRequest)
+		// 	.retrieve()
+		// 	.bodyToMono(Member2.class)
+		// 	.block();
+
+		Member2 member = new Member2();
+		member.setUsername("1");
+		member.setPassword("$2a$12$U7fUE2izybNwQqaWXENywuAa45DoPPW/ZeS56g0iFzGDi0jKYGUOW");
+		member.setRole("ROLE_USER");
+		return new CustomUserDetails(member);
+		// if (!response.isEmpty()) {
+		// }
+
+		// new CustomUserDetails()
 
 		//DB에서 조회
 		// UserEntity userData = userRepository.findByUsername(username);
@@ -42,37 +82,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 		// 	return new CustomUserDetails(userData);
 		// }
 
-		// String response = webClient.post()
-		// 	.uri("/login")
-		// 	.bodyValue(loginMemberRequest)
-		// 	.retrieve()
-		// 	.bodyToMono(String.class)
-		// 	.block();
-
-		return null;
+		// return null;
 	}
-
-	// @Override
-	// @Transactional
-	// // 로그인시에 DB에서 유저정보와 권한정보를 가져와서 해당 정보를 기반으로 userdetails.User 객체를 생성해 리턴
-	// public UserDetails loadUserByUsername(final String username) {
-	//
-	// 	return userRepository.findOneWithAuthoritiesByUsername(username)
-	// 		.map(user -> createUser(username, user))
-	// 		.orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
-	// }
-	//
-	// private org.springframework.security.core.userdetails.User createUser(String username, User user) {
-	// 	if (!user.isActivated()) {
-	// 		throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
-	// 	}
-	//
-	// 	List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
-	// 		.map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
-	// 		.collect(Collectors.toList());
-	//
-	// 	return new org.springframework.security.core.userdetails.User(user.getUsername(),
-	// 		user.getPassword(),
-	// 		grantedAuthorities);
-	// }
 }

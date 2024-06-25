@@ -48,7 +48,7 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
-		loginFilter.setFilterProcessesUrl("/auth/login");
+		loginFilter.setFilterProcessesUrl("/auth/login1312321321321313123");
 
 		http
 			.csrf((auth) -> auth.disable());
@@ -68,11 +68,9 @@ public class SecurityConfig {
 		// 	.addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
 		//필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
+		//필터 방식
 		// http
-		// 	.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
-		// 		UsernamePasswordAuthenticationFilter.class);
-		http
-			.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+		// 	.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
 
 		http
 			.sessionManagement((session) -> session
