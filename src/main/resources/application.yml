@@ -3,16 +3,39 @@ spring:
     name: auth-service
 
 
-  datasource:
-    url: jdbc:mysql://133.186.241.167:3306/be6_supernova_dev
-    username: be6_supernova
-    password: Hv-]JRIyCw[[9O18
-    driver-class-name: com.mysql.cj.jdbc.Driver
 
+
+
+  #  datasource:
+  #    url: jdbc:mysql://133.186.241.167:3306/be6_supernova_auth
+  #    username: be6_supernova
+  #    password: Hv-]JRIyCw[[9O18
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
+    open-in-view: false
+    show-sql: true
     hibernate:
       ddl-auto: validate
+    properties:
+      format_sql: true
+      use_sql_comments: true
+      highlight_sql: true
+      auto_quote_keyword: true
+
+  data:
+    redis:
+      port: 6379
+      host: 133.186.241.167
+      password: "*N2vya7H@muDTwdNMR!"
+      database: 17
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 10
+          min-idle: 2
+
+
 eureka:
   client:
     register-with-eureka: true
@@ -24,13 +47,31 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+    org.hibernate.orm.jdbc.bind: trace
+    org.springframework.transaction.interceptor: trace
+
 
 jwt:
   header: Authorization
   secret: vzxvgsjdgdfjgfdskgjdsfkgjdsfkgkdsfgjdfkgjdfsgdklgjadgslkjgsaklj
-  token-validity-in-seconds: 86400 # ttl (?)
-
-
+  token-validity-in-seconds: 86400
 
 server:
   port: 8778
+#spring:
+#  application:
+#    name: NHN Academy - Spring Boot JPA
+#  jpa:
+#    open-in-view: false
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        use_sql_comments: true
+#        highlight_sql: true
+#        auto_quote_keyword: true
+#
+#logging:
+#  level:
+#    org.hibernate.orm.jdbc.bind: trace
+#    org.springframework.transaction.interceptor: trace
