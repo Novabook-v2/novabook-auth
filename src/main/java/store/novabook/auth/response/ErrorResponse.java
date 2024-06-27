@@ -1,4 +1,4 @@
-package store.novabook.auth.config;
+package store.novabook.auth.response;
 
 import java.util.HashMap;
 import java.util.Map;

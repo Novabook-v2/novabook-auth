@@ -1,73 +1,82 @@
 package store.novabook.auth.config;
 
+import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import store.novabook.auth.service.CustomAdminDetailsService;
+import store.novabook.auth.service.CustomMembersDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	//AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
-	private final AuthenticationConfiguration authenticationConfiguration;
+	private final CustomAdminDetailsService customAdminDetailsService;
+	private final CustomMembersDetailsService customMembersDetailsService;
 
-	// private final JWTUtil jwtUtil;
-
-	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
-
-		this.authenticationConfiguration = authenticationConfiguration;
-		// this.jwtUtil = jwtUtil;
+	public SecurityConfig(CustomAdminDetailsService customAdminDetailsService,
+		CustomMembersDetailsService customMembersDetailsService) {
+		this.customAdminDetailsService = customAdminDetailsService;
+		this.customMembersDetailsService = customMembersDetailsService;
 	}
 
-	//AuthenticationManager Bean 등록
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+	@Qualifier("adminAuthenticationManager")
+	public AuthenticationManager adminAuthenticationManager() throws Exception {
+		return new ProviderManager(Arrays.asList(adminAuthenticationProvider()));
+	}
 
-		return configuration.getAuthenticationManager();
+	@Bean
+	@Primary
+	@Qualifier("memberAuthenticationManager")
+	public AuthenticationManager memberAuthenticationManager() throws Exception {
+		return new ProviderManager(Arrays.asList(memberAuthenticationProvider()));
+	}
+
+	@Bean
+	public DaoAuthenticationProvider adminAuthenticationProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(customAdminDetailsService);
+		provider.setPasswordEncoder(bCryptPasswordEncoder());
+		return provider;
+	}
+
+	@Bean
+	public DaoAuthenticationProvider memberAuthenticationProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(customMembersDetailsService);
+		provider.setPasswordEncoder(bCryptPasswordEncoder());
+		return provider;
 	}
 
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-
 		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-		// LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
-		// loginFilter.setFilterProcessesUrl("/auth/login1312321321321313123");
-
 		http
-			.csrf((auth) -> auth.disable());
-
-		http
-			.formLogin((auth) -> auth.disable());
-
-		http
-			.httpBasic((auth) -> auth.disable());
-
-		http
-			.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/login", "/", "/join", "/auth/**").permitAll()
-				.anyRequest().authenticated());
-
-		// http
-		// 	.addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
-
-		//필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
-		//필터 방식
-		// http
-		// 	.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
-
-		http
-			.sessionManagement((session) -> session
+			.csrf(AbstractHttpConfigurer::disable)
+			.formLogin(AbstractHttpConfigurer::disable)
+			.httpBasic(AbstractHttpConfigurer::disable)
+			.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/", "/auth/login", "/auth/uuid").permitAll()
+				.requestMatchers("/auth/admin/**").permitAll()
+				.anyRequest().authenticated())
+			.sessionManagement(session -> session
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		return http.build();

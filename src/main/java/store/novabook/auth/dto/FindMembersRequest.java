@@ -1,6 +1,6 @@
 package store.novabook.auth.dto;
 
-public record FindMemberRequest(
+public record FindMembersRequest(
 	String memberId
 ) {
 }

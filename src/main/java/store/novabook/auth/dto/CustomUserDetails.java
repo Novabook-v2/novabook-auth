@@ -6,38 +6,41 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import store.novabook.auth.entity.Member2;
+import store.novabook.auth.entity.Users;
 
 public class CustomUserDetails implements UserDetails {
 
-	private final Member2 member;
+	private final Users users;
 
-	public CustomUserDetails(Member2 member) {
-		this.member = member;
+	public CustomUserDetails(Users users) {
+		this.users = users;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-
 		Collection<GrantedAuthority> collection = new ArrayList<>();
-		// collection.add(new GrantedAuthority() {
-		// 	@Override
-		// 	public String getAuthority() {
-		// 		return userEntity.getRole();
-		// 	}
-		// });
+		collection.add(new GrantedAuthority() {
+			@Override
+			public String getAuthority() {
+				return users.getRole();
+			}
+		});
 
 		return collection;
 	}
 
+	public long getId() {
+		return users.getId();
+	}
+
 	@Override
 	public String getPassword() {
-		return member.getPassword();
+		return users.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return member.getUsername();
+		return Long.toString(users.getId());
 	}
 
 	@Override
@@ -58,5 +61,9 @@ public class CustomUserDetails implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public Object getDetails() {
+		return users;
 	}
 }
