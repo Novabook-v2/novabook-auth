@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
 
 import store.novabook.auth.dto.LoginMemberRequest;
 import store.novabook.auth.dto.TokenDto;
@@ -44,6 +45,9 @@ public class LoginController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = tokenProvider.createToken(authentication);
 
-		return ResponseEntity.ok(new TokenDto(jwt));
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer " + jwt);
+
+		return ResponseEntity.ok().headers(headers).body(new TokenDto(jwt));
 	}
 }
