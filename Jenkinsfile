@@ -51,14 +51,14 @@ pipeline {
         }
         stage('Deploy to Front Server 1') {
             steps {
-                deployToServer(FRONT_SERVER_1, DEPLOY_PATH_1, 8093)
+                deployToServer(FRONT_SERVER_1, DEPLOY_PATH_1, 8778)
                 showLogs(FRONT_SERVER_1, DEPLOY_PATH_1)
             }
         }
 
         stage('Verification') {
             steps {
-                verifyDeployment(FRONT_SERVER_1, 8093)
+                verifyDeployment(FRONT_SERVER_1, 8778)
             }
         }
     }
@@ -76,7 +76,8 @@ def deployToServer(server, deployPath, port) {
     withCredentials([sshUserPrivateKey(credentialsId: 'nova-dev', keyFileVariable: 'PEM_FILE')]) {
         sh """
         scp -o StrictHostKeyChecking=no -i \$PEM_FILE target/${ARTIFACT_NAME} ${server}:${deployPath}
-        ssh -o StrictHostKeyChecking=no -i \$PEM_FILE ${server} 'nohup java -jar ${deployPath}/${ARTIFACT_NAME} --server.port=${port} ${env.JAVA_OPTS} > ${deployPath}/app.log 2>&1 &'
+        ssh -o StrictHostKeyChecking=no -i \$PEM_FILE ${server} 'fuser -k ${port}/tcp || true'
+        ssh -o StrictHostKeyChecking=no -i \$PEM_FILE ${server} 'nohup /home/jdk-21.0.3+9/bin/java -jar ${deployPath}/${ARTIFACT_NAME} --server.port=${port} ${env.JAVA_OPTS} > ${deployPath}/app.log 2>&1 &'
         """
     }
 }
