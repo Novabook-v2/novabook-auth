@@ -4,6 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import jakarta.validation.Valid;
 import store.novabook.auth.response.ApiResponse;
 import store.novabook.auth.dto.FindMemberLoginResponse;
 import store.novabook.auth.dto.FindMembersRequest;
@@ -12,8 +13,8 @@ import store.novabook.auth.dto.FindMembersRequest;
 public interface CustomMembersDetailClient {
 
 	@PostMapping("/find")
-	ApiResponse<FindMemberLoginResponse> find(@RequestBody FindMembersRequest findMembersRequest);
+	ApiResponse<FindMemberLoginResponse> find(@Valid @RequestBody FindMembersRequest findMembersRequest);
 
 	@PostMapping("/find/admin")
-	ApiResponse<FindMemberLoginResponse> findAdmin(@RequestBody FindMembersRequest findMembersRequest);
+	ApiResponse<FindMemberLoginResponse> findAdmin(@Valid @RequestBody FindMembersRequest findMembersRequest);
 }
