@@ -43,7 +43,7 @@ jobs:
           script_stop: true
           script: |
             chmod 755 ./auth/target/auth-0.0.1-SNAPSHOT.jar
-            fuser -k 8778/tcp
+            fuser -k 8778/tcp | true
             ./auth/startup.sh
 
 
