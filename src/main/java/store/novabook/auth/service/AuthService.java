@@ -1,6 +1,7 @@
 package store.novabook.auth.service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import store.novabook.auth.entity.Auth;
 @RequiredArgsConstructor
 public class AuthService {
 
-	private final RedisTemplate<String, Auth> redisTemplate;
+	private final RedisTemplate<String, Object> redisTemplate;
 
 	public void saveAuth(Auth auth) {
 		if (Boolean.TRUE.equals(redisTemplate.hasKey(auth.getUuid()))) {
@@ -23,11 +24,17 @@ public class AuthService {
 		redisTemplate.opsForValue().set(auth.getUuid(), auth);
 	}
 
-	public Auth getAuth(String id) {
-		Auth auth = redisTemplate.opsForValue().get(id);
-		if (auth == null) {
-			throw new NoSuchElementException("No Auth found with id: " + id);
+	// public Optional<Auth> getAuth(String id) {
+	// 	Auth auth = redisTemplate.opsForValue().get(id);
+	// 	return Optional.ofNullable(auth);
+	// }
+
+	public Auth getAuth(String uuid) {
+		Object object = redisTemplate.opsForValue().get(uuid);
+		if (object instanceof Auth) {
+			return (Auth) object;
+		} else {
+			throw new IllegalArgumentException("No auth found with uuid: " + uuid);
 		}
-		return auth;
 	}
 }
