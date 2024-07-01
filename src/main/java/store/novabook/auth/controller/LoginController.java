@@ -19,6 +19,7 @@ import store.novabook.auth.jwt.TokenProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class LoginController {
@@ -36,18 +37,21 @@ public class LoginController {
 	@PostMapping("/auth/login")
 	public ResponseEntity<TokenDto> authorize(@RequestBody LoginMemberRequest loginMemberRequest) {
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(loginMemberRequest.loginId(), loginMemberRequest.loginPassword(),
 				authorities);
 
 		Authentication authentication = authenticationManager.authenticate(authenticationToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = tokenProvider.createToken(authentication);
+		UUID uuid = UUID.randomUUID();
+		String access = tokenProvider.createAccessToken(authentication, uuid);
+		String refresh = tokenProvider.createRefreshToken(authentication, uuid);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "Bearer " + jwt);
+		headers.set("Authorization", "Bearer " + access);
+		headers.set("Cookie", refresh);
 
-		return ResponseEntity.ok().headers(headers).body(new TokenDto(jwt));
+		return ResponseEntity.ok().headers(headers).body(new TokenDto(access));
 	}
 }

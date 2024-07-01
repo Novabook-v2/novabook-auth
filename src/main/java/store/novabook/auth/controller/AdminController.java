@@ -1,5 +1,7 @@
 package store.novabook.auth.controller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +43,10 @@ public class AdminController {
 
 		Authentication authentication = authenticationManager.authenticate(authenticationToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = tokenProvider.createToken(authentication);
+		UUID uuid = UUID.randomUUID();
+		String access = tokenProvider.createAccessToken(authentication, uuid);
+		String refresh = tokenProvider.createRefreshToken(authentication, uuid);
 
-		return ResponseEntity.ok(new TokenDto(jwt));
+		return ResponseEntity.ok(new TokenDto(access));
 	}
 }

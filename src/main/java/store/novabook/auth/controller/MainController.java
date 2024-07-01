@@ -1,5 +1,7 @@
 package store.novabook.auth.controller;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
@@ -22,7 +24,7 @@ public class MainController {
 	public String mainP() {
 		UUID uuid = UUID.randomUUID();
 
-		Auth auth = Auth.of(uuid.toString(), 1L, "ROLE_USER");
+		Auth auth = Auth.of(uuid.toString(), 1L, "ROLE_USER", LocalDateTime.now());
 		authService.saveAuth(auth);
 
 		authService.getAuth(uuid.toString());

@@ -1,6 +1,8 @@
 package store.novabook.auth.jwt;
 
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
@@ -41,7 +43,7 @@ public class TokenProvider implements InitializingBean {
 
 	private final AuthService authService;
 
-	public String createToken(Authentication authentication) {
+	public String createAccessToken(Authentication authentication, UUID uuid) {
 
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
@@ -52,14 +54,55 @@ public class TokenProvider implements InitializingBean {
 			.map(GrantedAuthority::getAuthority)
 			.collect(Collectors.joining(","));
 
-		UUID uuid = UUID.randomUUID();
-		Auth auth = Auth.of(uuid.toString(), Long.parseLong(authentication.getName()), authoritiesString);
+		return Jwts.builder()
+			.setHeaderParam("typ", "JWT")
+			.claim("uuid", uuid.toString())
+			.claim("authorities", authoritiesString)
+			.claim("category", "access")
+			.signWith(key, SignatureAlgorithm.HS256)
+			.setIssuedAt(now)
+			.setExpiration(now)
+			.compact();
+	}
+
+	public String createAccessToken(UUID uuid) {
+
+		Date now = new Date();
+		Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
+
+		String authoritiesString = "ROLE_USER";
+
+		return Jwts.builder()
+			.setHeaderParam("typ", "JWT")
+			.claim("uuid", uuid.toString())
+			.claim("authorities", authoritiesString)
+			.claim("category", "access")
+			.signWith(key, SignatureAlgorithm.HS256)
+			.setIssuedAt(now)
+			.setExpiration(now)
+			.compact();
+	}
+
+	public String createRefreshToken(Authentication authentication, UUID uuid) {
+
+		Date now = new Date();
+		Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000 * 24);
+
+		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+		String authoritiesString = authorities.stream()
+			.map(GrantedAuthority::getAuthority)
+			.collect(Collectors.joining(","));
+
+		Auth auth = Auth.of(uuid.toString(), Long.parseLong(authentication.getName()), authoritiesString,
+			LocalDateTime.ofInstant(validity.toInstant(), ZoneId.systemDefault()));
 		authService.saveAuth(auth);
 
 		return Jwts.builder()
 			.setHeaderParam("typ", "JWT")
 			.claim("uuid", uuid.toString())
 			.claim("authorities", authoritiesString)
+			.claim("category", "refresh")
 			.signWith(key, SignatureAlgorithm.HS256)
 			.setIssuedAt(now)
 			.setExpiration(validity)
@@ -73,7 +116,7 @@ public class TokenProvider implements InitializingBean {
 			.parseClaimsJws(token)
 			.getBody();
 
-		return claims.getSubject();
+		return claims.get("uuid", String.class);
 	}
 
 	public boolean validateToken(String authToken) {
