@@ -46,7 +46,8 @@ public class TokenProvider implements InitializingBean {
 	public String createAccessToken(Authentication authentication, UUID uuid) {
 
 		Date now = new Date();
-		Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
+		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
+		Date validity = new Date(now.getTime() + 120 * 1000);
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -61,11 +62,30 @@ public class TokenProvider implements InitializingBean {
 			.claim("category", "access")
 			.signWith(key, SignatureAlgorithm.HS256)
 			.setIssuedAt(now)
-			.setExpiration(now)
+			.setExpiration(validity)
 			.compact();
 	}
 
 	public String createAccessToken(UUID uuid) {
+
+		Date now = new Date();
+		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
+		Date validity = new Date(now.getTime() + 120 * 1000);
+
+		String authoritiesString = "ROLE_USER";
+
+		return Jwts.builder()
+			.setHeaderParam("typ", "JWT")
+			.claim("uuid", uuid.toString())
+			.claim("authorities", authoritiesString)
+			.claim("category", "access")
+			.signWith(key, SignatureAlgorithm.HS256)
+			.setIssuedAt(now)
+			.setExpiration(validity)
+			.compact();
+	}
+
+	public String createExpireAccessToken(UUID uuid) {
 
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
