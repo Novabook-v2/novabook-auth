@@ -24,10 +24,6 @@ public class AuthService {
 		redisTemplate.opsForValue().set(auth.getUuid(), auth);
 	}
 
-	// public Optional<Auth> getAuth(String id) {
-	// 	Auth auth = redisTemplate.opsForValue().get(id);
-	// 	return Optional.ofNullable(auth);
-	// }
 
 	public Auth getAuth(String uuid) {
 		Object object = redisTemplate.opsForValue().get(uuid);
