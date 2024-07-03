@@ -35,6 +35,11 @@ public class TokenProvider implements InitializingBean {
 	@Value("${jwt.token-validity-in-seconds}")
 	private long tokenValidityInSeconds;
 
+	private static final String AUTHORITIES = "authorities";
+	private static final String UUID = "uuid";
+	private static final String CATEGORY = "category";
+	private static final String ACCESS = "access";
+
 	@Override
 	public void afterPropertiesSet() {
 		byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
@@ -47,7 +52,7 @@ public class TokenProvider implements InitializingBean {
 
 		Date now = new Date();
 		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
-		Date validity = new Date(now.getTime() + 360 * 1000);
+		Date validity = new Date(now.getTime() + 100 * 1000);
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -57,9 +62,9 @@ public class TokenProvider implements InitializingBean {
 
 		return Jwts.builder()
 			.setHeaderParam("typ", "JWT")
-			.claim("uuid", uuid.toString())
-			.claim("authorities", authoritiesString)
-			.claim("category", "access")
+			.claim(UUID, uuid.toString())
+			.claim(AUTHORITIES, authoritiesString)
+			.claim(CATEGORY, ACCESS)
 			.signWith(key, SignatureAlgorithm.HS256)
 			.setIssuedAt(now)
 			.setExpiration(validity)
@@ -70,15 +75,15 @@ public class TokenProvider implements InitializingBean {
 
 		Date now = new Date();
 		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
-		Date validity = new Date(now.getTime() + 360 * 1000);
+		Date validity = new Date(now.getTime() + 100 * 1000);
 
 		String authoritiesString = "ROLE_USER";
 
 		return Jwts.builder()
 			.setHeaderParam("typ", "JWT")
-			.claim("uuid", uuid.toString())
-			.claim("authorities", authoritiesString)
-			.claim("category", "access")
+			.claim(UUID, uuid.toString())
+			.claim(AUTHORITIES, authoritiesString)
+			.claim(CATEGORY, ACCESS)
 			.signWith(key, SignatureAlgorithm.HS256)
 			.setIssuedAt(now)
 			.setExpiration(validity)
@@ -94,9 +99,9 @@ public class TokenProvider implements InitializingBean {
 
 		return Jwts.builder()
 			.setHeaderParam("typ", "JWT")
-			.claim("uuid", uuid.toString())
-			.claim("authorities", authoritiesString)
-			.claim("category", "access")
+			.claim(UUID, uuid.toString())
+			.claim(AUTHORITIES, authoritiesString)
+			.claim(CATEGORY, ACCESS)
 			.signWith(key, SignatureAlgorithm.HS256)
 			.setIssuedAt(now)
 			.setExpiration(now)
@@ -120,9 +125,9 @@ public class TokenProvider implements InitializingBean {
 
 		return Jwts.builder()
 			.setHeaderParam("typ", "JWT")
-			.claim("uuid", uuid.toString())
-			.claim("authorities", authoritiesString)
-			.claim("category", "refresh")
+			.claim(UUID, uuid.toString())
+			.claim(AUTHORITIES, authoritiesString)
+			.claim(CATEGORY, "refresh")
 			.signWith(key, SignatureAlgorithm.HS256)
 			.setIssuedAt(now)
 			.setExpiration(validity)

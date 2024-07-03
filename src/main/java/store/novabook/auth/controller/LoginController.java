@@ -37,7 +37,7 @@ public class LoginController {
 	@PostMapping("/auth/login")
 	public ResponseEntity<TokenDto> authorize(@RequestBody LoginMemberRequest loginMemberRequest) {
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+		authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(loginMemberRequest.loginId(), loginMemberRequest.loginPassword(),
 				authorities);

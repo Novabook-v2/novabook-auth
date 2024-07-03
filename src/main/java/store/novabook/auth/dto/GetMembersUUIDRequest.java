@@ -1,6 +1,6 @@
 package store.novabook.auth.dto;
 
-public record GetUsersUUIDRequest(
+public record GetMembersUUIDRequest(
 	String uuid
 ) {
 }
