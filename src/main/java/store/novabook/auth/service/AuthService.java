@@ -1,8 +1,5 @@
 package store.novabook.auth.service;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
