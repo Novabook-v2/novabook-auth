@@ -32,6 +32,7 @@ public class RefreshController {
 		String uuid = tokenProvider.getUsernameFromToken(refreshToken);
 		Auth auth = authService.getAuth(uuid);
 
+
 		LocalDateTime expirationTime = auth.getExpirationTime();
 		LocalDateTime now = LocalDateTime.now();
 		if (expirationTime.isAfter(now)) {
