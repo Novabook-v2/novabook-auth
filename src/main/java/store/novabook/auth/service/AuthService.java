@@ -21,13 +21,26 @@ public class AuthService {
 		redisTemplate.opsForValue().set(auth.getUuid(), auth);
 	}
 
-
 	public Auth getAuth(String uuid) {
 		Object object = redisTemplate.opsForValue().get(uuid);
 		if (object instanceof Auth) {
-			return (Auth) object;
+			return (Auth)object;
 		} else {
 			throw new IllegalArgumentException("No auth found with uuid: " + uuid);
 		}
+	}
+
+	public boolean existsByUuid(String uuid) {
+		return Boolean.TRUE.equals(redisTemplate.hasKey(uuid));
+	}
+
+	public boolean deleteAuth(String uuid) {
+		Object object = redisTemplate.opsForValue().get(uuid);
+		if (object instanceof Auth) {
+			redisTemplate.delete(uuid);
+		} else {
+			return false;
+		}
+		return true;
 	}
 }

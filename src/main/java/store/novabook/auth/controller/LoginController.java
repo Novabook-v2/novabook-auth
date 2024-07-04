@@ -50,7 +50,7 @@ public class LoginController {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "Bearer " + access);
-		headers.set("Cookie", refresh);
+		headers.set("Refresh", "Bearer " + refresh);
 
 		return ResponseEntity.ok().headers(headers).body(new TokenDto(access));
 	}

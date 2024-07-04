@@ -52,7 +52,7 @@ public class TokenProvider implements InitializingBean {
 
 		Date now = new Date();
 		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
-		Date validity = new Date(now.getTime() + 600 * 1000);
+		Date validity = new Date(now.getTime() + 300 * 1000);
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -75,7 +75,7 @@ public class TokenProvider implements InitializingBean {
 
 		Date now = new Date();
 		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
-		Date validity = new Date(now.getTime() + 600 * 1000);
+		Date validity = new Date(now.getTime() + 300 * 1000);
 
 		String authoritiesString = "ROLE_USER";
 
@@ -111,7 +111,7 @@ public class TokenProvider implements InitializingBean {
 	public String createRefreshToken(Authentication authentication, UUID uuid) {
 
 		Date now = new Date();
-		Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000 * 24);
+		Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1200);
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
