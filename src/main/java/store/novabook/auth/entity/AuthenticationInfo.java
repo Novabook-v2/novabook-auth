@@ -15,14 +15,14 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Setter
-@RedisHash("auth")
-public class Auth implements Serializable {
+@RedisHash("AuthenticationInfo")
+public class AuthenticationInfo implements Serializable {
 
 	@NotNull
 	String uuid;
 
 	@NotNull
-	long usersId;
+	long membersId;
 
 	@NotNull
 	String role;
@@ -30,14 +30,14 @@ public class Auth implements Serializable {
 	LocalDateTime expirationTime;
 
 	@Builder
-	private Auth(String uuid, long usersId, String role, LocalDateTime expirationTime) {
+	private AuthenticationInfo(String uuid, long membersId, String role, LocalDateTime expirationTime) {
 		this.uuid = uuid;
-		this.usersId = usersId;
+		this.membersId = membersId;
 		this.role = role;
 		this.expirationTime = expirationTime;
 	}
 
-	public static Auth of(String uuid, long usersId, String role, LocalDateTime expirationTime) {
-		return Auth.builder().uuid(uuid).usersId(usersId).role(role).expirationTime(LocalDateTime.now()).build();
+	public static AuthenticationInfo of(String uuid, long membersId, String role, LocalDateTime expirationTime) {
+		return AuthenticationInfo.builder().uuid(uuid).membersId(membersId).role(role).expirationTime(expirationTime).build();
 	}
 }

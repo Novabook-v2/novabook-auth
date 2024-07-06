@@ -14,20 +14,20 @@ import store.novabook.auth.dto.GetMembersTokenResponse;
 import store.novabook.auth.dto.GetMembersUUIDRequest;
 import store.novabook.auth.dto.GetMembersUUIDResponse;
 import store.novabook.auth.jwt.TokenProvider;
-import store.novabook.auth.service.AuthService;
+import store.novabook.auth.service.AuthenticationService;
 
 @RestController
 @RequestMapping("/auth/members")
 @RequiredArgsConstructor
 public class UUIDController {
 
-	private final AuthService authService;
+	private final AuthenticationService authenticationService;
 	private final TokenProvider tokenProvider;
 
 	@PostMapping("/uuid")
 	public ResponseEntity<GetMembersUUIDResponse> uuid(@RequestBody GetMembersUUIDRequest getMembersUuidRequest) {
 		GetMembersUUIDResponse getMembersUUIDResponse = new GetMembersUUIDResponse(
-			Long.toString(authService.getAuth(getMembersUuidRequest.uuid()).getUsersId()));
+			Long.toString(authenticationService.getAuth(getMembersUuidRequest.uuid()).getMembersId()));
 		return ResponseEntity.ok(getMembersUUIDResponse);
 	}
 
@@ -50,7 +50,7 @@ public class UUIDController {
 		} catch (Exception e) {
 		}
 		GetMembersTokenResponse getMembersTokenResponse = new GetMembersTokenResponse(
-			authService.getAuth(uuid).getUsersId());
+			authenticationService.getAuth(uuid).getMembersId());
 		return ResponseEntity.ok(getMembersTokenResponse);
 	}
 }

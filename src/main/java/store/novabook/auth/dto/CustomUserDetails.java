@@ -6,14 +6,14 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import store.novabook.auth.entity.Users;
+import store.novabook.auth.entity.AuthenticationMembers;
 
 public class CustomUserDetails implements UserDetails {
 
-	private final Users users;
+	private final AuthenticationMembers authenticationMembers;
 
-	public CustomUserDetails(Users users) {
-		this.users = users;
+	public CustomUserDetails(AuthenticationMembers authenticationMembers) {
+		this.authenticationMembers = authenticationMembers;
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class CustomUserDetails implements UserDetails {
 		collection.add(new GrantedAuthority() {
 			@Override
 			public String getAuthority() {
-				return users.getRole();
+				return authenticationMembers.getRole();
 			}
 		});
 
@@ -30,17 +30,17 @@ public class CustomUserDetails implements UserDetails {
 	}
 
 	public long getId() {
-		return users.getId();
+		return authenticationMembers.getId();
 	}
 
 	@Override
 	public String getPassword() {
-		return users.getPassword();
+		return authenticationMembers.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return Long.toString(users.getId());
+		return Long.toString(authenticationMembers.getId());
 	}
 
 	@Override
@@ -64,6 +64,6 @@ public class CustomUserDetails implements UserDetails {
 	}
 
 	public Object getDetails() {
-		return users;
+		return authenticationMembers;
 	}
 }

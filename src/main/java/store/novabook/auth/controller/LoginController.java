@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpHeaders;
 
-import store.novabook.auth.dto.LoginMemberRequest;
-import store.novabook.auth.dto.TokenDto;
+import store.novabook.auth.dto.LoginMembersRequest;
+import store.novabook.auth.dto.LoginMembersResponse;
 import store.novabook.auth.jwt.TokenProvider;
 
 import java.util.ArrayList;
@@ -35,23 +35,20 @@ public class LoginController {
 	}
 
 	@PostMapping("/auth/login")
-	public ResponseEntity<TokenDto> authorize(@RequestBody LoginMemberRequest loginMemberRequest) {
+	public ResponseEntity<LoginMembersResponse> login(@RequestBody LoginMembersRequest loginMembersRequest) {
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
 		UsernamePasswordAuthenticationToken authenticationToken =
-			new UsernamePasswordAuthenticationToken(loginMemberRequest.loginId(), loginMemberRequest.loginPassword(),
+			new UsernamePasswordAuthenticationToken(loginMembersRequest.loginId(), loginMembersRequest.loginPassword(),
 				authorities);
 
 		Authentication authentication = authenticationManager.authenticate(authenticationToken);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
 		UUID uuid = UUID.randomUUID();
 		String access = tokenProvider.createAccessToken(authentication, uuid);
 		String refresh = tokenProvider.createRefreshToken(authentication, uuid);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "Bearer " + access);
-		headers.set("Refresh", "Bearer " + refresh);
+		LoginMembersResponse loginMembersResponse = new LoginMembersResponse(access, refresh);
 
-		return ResponseEntity.ok().headers(headers).body(new TokenDto(access));
+		return ResponseEntity.ok().body(loginMembersResponse);
 	}
 }

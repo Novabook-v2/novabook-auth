@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.validation.Valid;
+import store.novabook.auth.dto.GetPaycoMembersRequest;
+import store.novabook.auth.dto.GetPaycoMembersResponse;
 import store.novabook.auth.response.ApiResponse;
 import store.novabook.auth.dto.FindMemberLoginResponse;
 import store.novabook.auth.dto.FindMembersRequest;
@@ -17,4 +19,7 @@ public interface CustomMembersDetailClient {
 
 	@PostMapping("/find/admin")
 	ApiResponse<FindMemberLoginResponse> findAdmin(@Valid @RequestBody FindMembersRequest findMembersRequest);
+
+	@PostMapping("/payco")
+	ApiResponse<GetPaycoMembersResponse> getPaycoMembers(@Valid @RequestBody GetPaycoMembersRequest getPaycoMembersRequest);
 }
