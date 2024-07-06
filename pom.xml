@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>store.novabook</groupId>
-    <artifactId>authenticationInfo</artifactId>
+    <artifactId>auth</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>authenticationInfo</name>
-    <description>authenticationInfo</description>
+    <name>auth</name>
+    <description>auth</description>
     <url/>
     <licenses>
         <license/>
