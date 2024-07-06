@@ -9,7 +9,7 @@ import store.novabook.auth.response.ApiResponse;
 import store.novabook.auth.dto.CustomUserDetails;
 import store.novabook.auth.dto.FindMemberLoginResponse;
 import store.novabook.auth.dto.FindMembersRequest;
-import store.novabook.auth.entity.Users;
+import store.novabook.auth.entity.AuthenticationMembers;
 
 @Service
 public class CustomMembersDetailsService implements UserDetailsService {
@@ -27,11 +27,11 @@ public class CustomMembersDetailsService implements UserDetailsService {
 		ApiResponse<FindMemberLoginResponse> findMembersLoginResponseResponse = customMembersDetailClient.find(
 			findMembersRequest);
 
-		Users users = new Users();
-		users.setId(findMembersLoginResponseResponse.getBody().id());
-		users.setUsername(findMembersLoginResponseResponse.getBody().loginId());
-		users.setPassword(findMembersLoginResponseResponse.getBody().password());
-		users.setRole(findMembersLoginResponseResponse.getBody().role());
-		return new CustomUserDetails(users);
+		AuthenticationMembers authenticationMembers = new AuthenticationMembers();
+		authenticationMembers.setId(findMembersLoginResponseResponse.getBody().id());
+		authenticationMembers.setUsername(findMembersLoginResponseResponse.getBody().loginId());
+		authenticationMembers.setPassword(findMembersLoginResponseResponse.getBody().password());
+		authenticationMembers.setRole(findMembersLoginResponseResponse.getBody().role());
+		return new CustomUserDetails(authenticationMembers);
 	}
 }

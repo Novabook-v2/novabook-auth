@@ -12,14 +12,14 @@ import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import store.novabook.auth.jwt.TokenProvider;
-import store.novabook.auth.service.AuthService;
+import store.novabook.auth.service.AuthenticationService;
 
 @RestController
 @RequestMapping("/auth/logout")
 @RequiredArgsConstructor
 public class LogoutController {
 
-	private final AuthService authService;
+	private final AuthenticationService authenticationService;
 	private final TokenProvider tokenProvider;
 
 	@PostMapping
@@ -35,11 +35,11 @@ public class LogoutController {
 
 		try {
 			uuid = tokenProvider.getUsernameFromToken(refreshToken);
-			if (!authService.existsByUuid(uuid)) {
+			if (!authenticationService.existsByUuid(uuid)) {
 				return ResponseEntity.badRequest().build();
 			}
 			if (tokenProvider.validateToken(refreshToken)) {
-				if (Boolean.TRUE.equals(authService.deleteAuth(uuid))) {
+				if (Boolean.TRUE.equals(authenticationService.deleteAuth(uuid))) {
 					return ResponseEntity.ok().build();
 				} else {
 					return ResponseEntity.badRequest().build();

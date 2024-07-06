@@ -2,8 +2,10 @@ package store.novabook.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record GetMembersUUIDRequest(
+public record LoginMembersRequest(
 	@NotBlank
-	String uuid
+	String loginId,
+	@NotBlank
+	String loginPassword
 ) {
 }

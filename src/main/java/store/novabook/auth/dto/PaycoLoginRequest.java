@@ -2,8 +2,8 @@ package store.novabook.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record GetMembersUUIDRequest(
+public record PaycoLoginRequest(
 	@NotBlank
-	String uuid
+	String paycoId
 ) {
 }

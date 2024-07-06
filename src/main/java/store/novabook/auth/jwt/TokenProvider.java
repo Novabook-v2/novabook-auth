@@ -20,8 +20,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import store.novabook.auth.entity.Auth;
-import store.novabook.auth.service.AuthService;
+import store.novabook.auth.dto.GetPaycoMembersResponse;
+import store.novabook.auth.entity.AuthenticationInfo;
+import store.novabook.auth.service.AuthenticationService;
 
 @Component
 @RequiredArgsConstructor
@@ -46,7 +47,7 @@ public class TokenProvider implements InitializingBean {
 		this.key = Keys.hmacShaKeyFor(keyBytes);
 	}
 
-	private final AuthService authService;
+	private final AuthenticationService authenticationService;
 
 	public String createAccessToken(Authentication authentication, UUID uuid) {
 
@@ -90,28 +91,10 @@ public class TokenProvider implements InitializingBean {
 			.compact();
 	}
 
-	public String createExpireAccessToken(UUID uuid) {
-
-		Date now = new Date();
-		Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
-
-		String authoritiesString = "ROLE_USER";
-
-		return Jwts.builder()
-			.setHeaderParam("typ", "JWT")
-			.claim(UUID, uuid.toString())
-			.claim(AUTHORITIES, authoritiesString)
-			.claim(CATEGORY, ACCESS)
-			.signWith(key, SignatureAlgorithm.HS256)
-			.setIssuedAt(now)
-			.setExpiration(now)
-			.compact();
-	}
-
 	public String createRefreshToken(Authentication authentication, UUID uuid) {
 
 		Date now = new Date();
-		Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1200);
+		Date validity = new Date(now.getTime() + 310 * 1000);
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -119,14 +102,34 @@ public class TokenProvider implements InitializingBean {
 			.map(GrantedAuthority::getAuthority)
 			.collect(Collectors.joining(","));
 
-		Auth auth = Auth.of(uuid.toString(), Long.parseLong(authentication.getName()), authoritiesString,
+		AuthenticationInfo authenticationInfo = AuthenticationInfo.of(uuid.toString(), Long.parseLong(authentication.getName()), authoritiesString,
 			LocalDateTime.ofInstant(validity.toInstant(), ZoneId.systemDefault()));
-		authService.saveAuth(auth);
+		authenticationService.saveAuth(authenticationInfo);
 
 		return Jwts.builder()
 			.setHeaderParam("typ", "JWT")
 			.claim(UUID, uuid.toString())
 			.claim(AUTHORITIES, authoritiesString)
+			.claim(CATEGORY, "refresh")
+			.signWith(key, SignatureAlgorithm.HS256)
+			.setIssuedAt(now)
+			.setExpiration(validity)
+			.compact();
+	}
+
+	public String createRefreshToken(GetPaycoMembersResponse getPaycoMembersResponse, UUID uuid) {
+
+		Date now = new Date();
+		Date validity = new Date(now.getTime() + 310 * 1000);
+
+		AuthenticationInfo authenticationInfo = AuthenticationInfo.of(uuid.toString(), getPaycoMembersResponse.id(), "ROLE_MEMBERS",
+			LocalDateTime.ofInstant(validity.toInstant(), ZoneId.systemDefault()));
+		authenticationService.saveAuth(authenticationInfo);
+
+		return Jwts.builder()
+			.setHeaderParam("typ", "JWT")
+			.claim(UUID, uuid.toString())
+			.claim(AUTHORITIES, "ROLE_MEMBERS")
 			.claim(CATEGORY, "refresh")
 			.signWith(key, SignatureAlgorithm.HS256)
 			.setIssuedAt(now)

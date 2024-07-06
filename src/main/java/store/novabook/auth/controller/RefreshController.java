@@ -13,16 +13,16 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import store.novabook.auth.dto.GetNewTokenRequest;
 import store.novabook.auth.dto.GetNewTokenResponse;
-import store.novabook.auth.entity.Auth;
+import store.novabook.auth.entity.AuthenticationInfo;
 import store.novabook.auth.jwt.TokenProvider;
-import store.novabook.auth.service.AuthService;
+import store.novabook.auth.service.AuthenticationService;
 
 @RestController
 @RequestMapping("/auth/refresh")
 @RequiredArgsConstructor
 public class RefreshController {
 
-	private final AuthService authService;
+	private final AuthenticationService authenticationService;
 	private final TokenProvider tokenProvider;
 
 	@PostMapping
@@ -30,10 +30,10 @@ public class RefreshController {
 
 		String refreshToken = getNewTokenRequest.refreshToken().replace("Bearer ", "");
 		String uuid = tokenProvider.getUsernameFromToken(refreshToken);
-		Auth auth = authService.getAuth(uuid);
+		AuthenticationInfo authenticationInfo = authenticationService.getAuth(uuid);
 
 
-		LocalDateTime expirationTime = auth.getExpirationTime();
+		LocalDateTime expirationTime = authenticationInfo.getExpirationTime();
 		LocalDateTime now = LocalDateTime.now();
 		if (expirationTime.isAfter(now)) {
 			return ResponseEntity.ok(new GetNewTokenResponse("expired"));
