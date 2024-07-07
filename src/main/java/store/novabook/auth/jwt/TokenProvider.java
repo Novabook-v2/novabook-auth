@@ -94,7 +94,7 @@ public class TokenProvider implements InitializingBean {
 	public String createRefreshToken(Authentication authentication, UUID uuid) {
 
 		Date now = new Date();
-		Date validity = new Date(now.getTime() + 600 * 1000);
+		Date validity = new Date(now.getTime() + 6000 * 1000);
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -120,7 +120,7 @@ public class TokenProvider implements InitializingBean {
 	public String createRefreshToken(GetPaycoMembersResponse getPaycoMembersResponse, UUID uuid) {
 
 		Date now = new Date();
-		Date validity = new Date(now.getTime() + 600 * 1000);
+		Date validity = new Date(now.getTime() + 6000 * 1000);
 
 		AuthenticationInfo authenticationInfo = AuthenticationInfo.of(uuid.toString(), getPaycoMembersResponse.id(), "ROLE_MEMBERS",
 			LocalDateTime.ofInstant(validity.toInstant(), ZoneId.systemDefault()));
