@@ -35,7 +35,7 @@ public class RefreshController {
 
 		LocalDateTime expirationTime = authenticationInfo.getExpirationTime();
 		LocalDateTime now = LocalDateTime.now();
-		if (expirationTime.isAfter(now)) {
+		if (expirationTime.isBefore(now)) {
 			return ResponseEntity.ok(new GetNewTokenResponse("expired"));
 		}
 		return ResponseEntity.ok(new GetNewTokenResponse(tokenProvider.createAccessToken(UUID.fromString(uuid))));
