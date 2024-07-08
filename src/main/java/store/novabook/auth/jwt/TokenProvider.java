@@ -28,7 +28,6 @@ import store.novabook.auth.util.KeyManagerUtil;
 import store.novabook.auth.util.dto.JWTConfigDto;
 
 @Component
-@RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
 	private Key key;
