@@ -28,6 +28,7 @@ import store.novabook.auth.util.KeyManagerUtil;
 import store.novabook.auth.util.dto.JWTConfigDto;
 
 @Component
+@RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
 	private Key key;
@@ -58,7 +59,7 @@ public class TokenProvider implements InitializingBean {
 
 		Date now = new Date();
 		// Date validity = new Date(now.getTime() + jwt.tokenValidityInSeconds() * 1000);
-		Date validity = new Date(now.getTime() + 60 * 1000);
+		Date validity = new Date(now.getTime() + 30 * 1000);
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -81,7 +82,7 @@ public class TokenProvider implements InitializingBean {
 
 		Date now = new Date();
 		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
-		Date validity = new Date(now.getTime() + 60 * 1000);
+		Date validity = new Date(now.getTime() + 30 * 1000);
 
 		String authoritiesString = "ROLE_USER";
 
