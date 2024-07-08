@@ -52,12 +52,14 @@ public class AuthenticationService {
 
 	public void saveDormant(DormantMembers dormantMembers) {
 		if (Boolean.TRUE.equals(redisTemplate.hasKey(dormantMembers.getUuid()))) {
-			throw new IllegalArgumentException("Dormant already exists for this uuid: " + dormantMembers.getUuid());
+			LocalDateTime now = LocalDateTime.now();
+			LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(300);
+			Duration duration = Duration.between(now, expirationTime);
+			redisTemplate.opsForValue().set(dormantMembers.getUuid(), dormantMembers, duration);
+		} else {
+			throw new IllegalArgumentException("No auth found with uuid: " + dormantMembers.getUuid());
 		}
-		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(300);
-		Duration duration = Duration.between(now, expirationTime);
-		redisTemplate.opsForValue().set(dormantMembers.getUuid(), dormantMembers, duration);
+
 	}
 
 	public DormantMembers getDormant(String uuid) {
