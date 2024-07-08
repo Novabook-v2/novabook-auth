@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import store.novabook.auth.entity.AuthenticationInfo;
+import store.novabook.auth.entity.DormantMembers;
 
 @Service
 @Transactional
@@ -47,5 +48,24 @@ public class AuthenticationService {
 			return false;
 		}
 		return true;
+	}
+
+	public void saveDormant(DormantMembers dormantMembers) {
+		if (Boolean.TRUE.equals(redisTemplate.hasKey(dormantMembers.getUuid()))) {
+			throw new IllegalArgumentException("Dormant already exists for this uuid: " + dormantMembers.getUuid());
+		}
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(300);
+		Duration duration = Duration.between(now, expirationTime);
+		redisTemplate.opsForValue().set(dormantMembers.getUuid(), dormantMembers, duration);
+	}
+
+	public DormantMembers getDormant(String uuid) {
+		Object object = redisTemplate.opsForValue().get(uuid);
+		if (object instanceof DormantMembers) {
+			return (DormantMembers)object;
+		} else {
+			throw new IllegalArgumentException("No dormant found with uuid: " + uuid);
+		}
 	}
 }

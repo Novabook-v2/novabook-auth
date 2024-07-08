@@ -36,7 +36,7 @@ public class UUIDController {
 		String accessToken = request.getHeader("authorization").replace("Bearer ", "");
 		String refreshToken = request.getHeader("refresh").replace("Bearer ", "");
 
-		if (Objects.isNull(accessToken) || Objects.isNull(refreshToken)) {
+		if (accessToken.isEmpty() || refreshToken.isEmpty()) {
 			return ResponseEntity.badRequest().build();
 		}
 
