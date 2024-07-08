@@ -31,6 +31,14 @@ public class UUIDController {
 		return ResponseEntity.ok(getMembersUUIDResponse);
 	}
 
+
+	@PostMapping("/dormant/uuid")
+	public ResponseEntity<GetMembersUUIDResponse> dormantUuid(@RequestBody GetMembersUUIDRequest getMembersUuidRequest) {
+		GetMembersUUIDResponse getMembersUUIDResponse = new GetMembersUUIDResponse(
+			Long.toString(authenticationService.getDormant(getMembersUuidRequest.uuid()).getMembersId()));
+		return ResponseEntity.ok(getMembersUUIDResponse);
+	}
+
 	@PostMapping("/token")
 	public ResponseEntity<GetMembersTokenResponse> token(HttpServletRequest request) {
 		String accessToken = request.getHeader("authorization").replace("Bearer ", "");
