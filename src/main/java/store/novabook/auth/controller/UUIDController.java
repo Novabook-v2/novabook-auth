@@ -32,7 +32,7 @@ public class UUIDController {
 	}
 
 
-	@PostMapping("/dormant/uuid")
+	@PostMapping("/uuid/dormant")
 	public ResponseEntity<GetMembersUUIDResponse> dormantUuid(@RequestBody GetMembersUUIDRequest getMembersUuidRequest) {
 		GetMembersUUIDResponse getMembersUUIDResponse = new GetMembersUUIDResponse(
 			Long.toString(authenticationService.getDormant(getMembersUuidRequest.uuid()).getMembersId()));
