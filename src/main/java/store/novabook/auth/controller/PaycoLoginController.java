@@ -40,8 +40,8 @@ public class PaycoLoginController {
 		}
 
 		UUID uuid = UUID.randomUUID();
-		String access = tokenProvider.createAccessToken(uuid);
-		String refresh = tokenProvider.createRefreshToken(paycoMembers.getBody(), uuid);
+		String access = tokenProvider.createOauthAccessToken(uuid);
+		String refresh = tokenProvider.createOauthRefreshToken(paycoMembers.getBody(), uuid);
 
 		PaycoLoginResponse paycoLoginResponse = new PaycoLoginResponse(access, refresh);
 

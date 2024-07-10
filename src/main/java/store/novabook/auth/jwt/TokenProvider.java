@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ import store.novabook.auth.util.KeyManagerUtil;
 import store.novabook.auth.util.dto.JWTConfigDto;
 
 @Component
-@RequiredArgsConstructor
+// @RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
 	private Key key;
@@ -77,13 +78,31 @@ public class TokenProvider implements InitializingBean {
 			.compact();
 	}
 
-	public String createAccessToken(UUID uuid) {
+	public String createAccessToken(UUID uuid, String authorities) {
 
 		Date now = new Date();
 		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
 		Date validity = new Date(now.getTime() + 6000 * 1000);
 
-		String authoritiesString = "ROLE_USER";
+
+		return Jwts.builder()
+			.setHeaderParam("typ", "JWT")
+			.claim(UUID, uuid.toString())
+			.claim(AUTHORITIES, authorities)
+			.claim(CATEGORY, ACCESS)
+			.signWith(key, SignatureAlgorithm.HS256)
+			.setIssuedAt(now)
+			.setExpiration(validity)
+			.compact();
+	}
+
+	public String createOauthAccessToken(UUID uuid) {
+
+		Date now = new Date();
+		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
+		Date validity = new Date(now.getTime() + 6000 * 1000);
+
+		String authoritiesString = "ROLE_MEMBERS";
 
 		return Jwts.builder()
 			.setHeaderParam("typ", "JWT")
@@ -122,7 +141,7 @@ public class TokenProvider implements InitializingBean {
 			.compact();
 	}
 
-	public String createRefreshToken(GetPaycoMembersResponse getPaycoMembersResponse, UUID uuid) {
+	public String createOauthRefreshToken(GetPaycoMembersResponse getPaycoMembersResponse, UUID uuid) {
 
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + 6000 * 1000);
