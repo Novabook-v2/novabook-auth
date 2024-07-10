@@ -26,18 +26,18 @@ public class RefreshController {
 	private final TokenProvider tokenProvider;
 
 	@PostMapping
-	public ResponseEntity<GetNewTokenResponse> getRefreshToken(@Valid @RequestBody GetNewTokenRequest getNewTokenRequest) {
+	public ResponseEntity<GetNewTokenResponse> getNewToken(@Valid @RequestBody GetNewTokenRequest getNewTokenRequest) {
 
 		String refreshToken = getNewTokenRequest.refreshToken().replace("Bearer ", "");
 		String uuid = tokenProvider.getUsernameFromToken(refreshToken);
 		AuthenticationInfo authenticationInfo = authenticationService.getAuth(uuid);
-
 
 		LocalDateTime expirationTime = authenticationInfo.getExpirationTime();
 		LocalDateTime now = LocalDateTime.now();
 		if (expirationTime.isBefore(now)) {
 			return ResponseEntity.ok(new GetNewTokenResponse("expired"));
 		}
-		return ResponseEntity.ok(new GetNewTokenResponse(tokenProvider.createAccessToken(UUID.fromString(uuid))));
+		return ResponseEntity.ok(new GetNewTokenResponse(
+			tokenProvider.createAccessToken(UUID.fromString(uuid), authenticationInfo.getRole())));
 	}
 }

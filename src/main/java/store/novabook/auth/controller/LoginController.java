@@ -36,11 +36,10 @@ public class LoginController {
 
 	@PostMapping("/auth/login")
 	public ResponseEntity<LoginMembersResponse> login(@RequestBody LoginMembersRequest loginMembersRequest) {
-		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(loginMembersRequest.loginId(), loginMembersRequest.loginPassword(),
-				authorities);
+				null);
 
 		Authentication authentication = authenticationManager.authenticate(authenticationToken);
 		UUID uuid = UUID.randomUUID();
