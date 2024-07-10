@@ -9,6 +9,7 @@ import store.novabook.auth.dto.GetDormantMembersRequest;
 import store.novabook.auth.dto.GetDormantMembersResponse;
 import store.novabook.auth.dto.GetPaycoMembersRequest;
 import store.novabook.auth.dto.GetPaycoMembersResponse;
+import store.novabook.auth.dto.LinkPaycoMembersRequest;
 import store.novabook.auth.response.ApiResponse;
 import store.novabook.auth.dto.FindMemberLoginResponse;
 import store.novabook.auth.dto.FindMembersRequest;
@@ -24,6 +25,9 @@ public interface CustomMembersDetailClient {
 
 	@PostMapping("/payco")
 	ApiResponse<GetPaycoMembersResponse> getPaycoMembers(@Valid @RequestBody GetPaycoMembersRequest getPaycoMembersRequest);
+
+	@PostMapping("/payco/link")
+	ApiResponse<Void> linkPayco(@Valid @RequestBody LinkPaycoMembersRequest linkPaycoMembersRequest);
 
 	@PostMapping("/status")
 	ApiResponse<GetDormantMembersResponse> getMemberDormantStatus(@Valid @RequestBody GetDormantMembersRequest getDormantMembersRequest);
