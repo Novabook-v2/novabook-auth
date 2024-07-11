@@ -74,7 +74,8 @@ public class SecurityConfig {
 			.httpBasic(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(authorize -> authorize
 				.requestMatchers("/", "/auth/login", "/auth/members/uuid", "/auth/refresh", "/auth/admin/login",
-					"/auth/members/token", "/auth/logout", "/auth/payco", "/auth/members/status", "/auth/members/uuid/dormant").permitAll()
+					"/auth/members/token", "/auth/logout", "/auth/payco", "/auth/members/status", "/auth/members/uuid/dormant",
+					"/auth/payco/link").permitAll()
 				.anyRequest().authenticated())
 			.sessionManagement(session -> session
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
