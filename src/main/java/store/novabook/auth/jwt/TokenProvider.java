@@ -9,20 +9,19 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 import store.novabook.auth.dto.CustomUserDetails;
-import store.novabook.auth.dto.GetPaycoMembersResponse;
+import store.novabook.auth.dto.response.GetPaycoMembersResponse;
 import store.novabook.auth.entity.AuthenticationInfo;
 import store.novabook.auth.service.AuthenticationService;
 import store.novabook.auth.util.KeyManagerUtil;
@@ -39,6 +38,7 @@ public class TokenProvider implements InitializingBean {
 	private static final String UUID = "uuid";
 	private static final String CATEGORY = "category";
 	private static final String ACCESS = "access";
+	private static final String ROLE_MEMBERS = "ROLE_MEMBERS";
 
 	private final AuthenticationService authenticationService;
 
@@ -58,7 +58,6 @@ public class TokenProvider implements InitializingBean {
 	public String createAccessToken(Authentication authentication, UUID uuid) {
 
 		Date now = new Date();
-		// Date validity = new Date(now.getTime() + jwt.tokenValidityInSeconds() * 1000);
 		Date validity = new Date(now.getTime() + 60 * 1000);
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -81,7 +80,6 @@ public class TokenProvider implements InitializingBean {
 	public String createAccessToken(UUID uuid, String authorities) {
 
 		Date now = new Date();
-		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
 		Date validity = new Date(now.getTime() + 60 * 1000);
 
 
@@ -99,15 +97,12 @@ public class TokenProvider implements InitializingBean {
 	public String createOauthAccessToken(UUID uuid) {
 
 		Date now = new Date();
-		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
 		Date validity = new Date(now.getTime() + 60000 * 1000);
-
-		String authoritiesString = "ROLE_MEMBERS";
 
 		return Jwts.builder()
 			.setHeaderParam("typ", "JWT")
 			.claim(UUID, uuid.toString())
-			.claim(AUTHORITIES, authoritiesString)
+			.claim(AUTHORITIES, ROLE_MEMBERS)
 			.claim(CATEGORY, ACCESS)
 			.signWith(key, SignatureAlgorithm.HS256)
 			.setIssuedAt(now)
@@ -148,14 +143,14 @@ public class TokenProvider implements InitializingBean {
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + 60000 * 1000);
 
-		AuthenticationInfo authenticationInfo = AuthenticationInfo.of(uuid.toString(), getPaycoMembersResponse.id(), "ROLE_MEMBERS",
+		AuthenticationInfo authenticationInfo = AuthenticationInfo.of(uuid.toString(), getPaycoMembersResponse.id(), ROLE_MEMBERS,
 			LocalDateTime.ofInstant(validity.toInstant(), ZoneId.systemDefault()));
 		authenticationService.saveAuth(authenticationInfo);
 
 		return Jwts.builder()
 			.setHeaderParam("typ", "JWT")
 			.claim(UUID, uuid.toString())
-			.claim(AUTHORITIES, "ROLE_MEMBERS")
+			.claim(AUTHORITIES, ROLE_MEMBERS)
 			.claim(CATEGORY, "refresh")
 			.signWith(key, SignatureAlgorithm.HS256)
 			.setIssuedAt(now)
@@ -164,13 +159,17 @@ public class TokenProvider implements InitializingBean {
 	}
 
 	public String getUsernameFromToken(String token) {
-		Claims claims = Jwts.parserBuilder()
-			.setSigningKey(key)
-			.build()
-			.parseClaimsJws(token)
-			.getBody();
+		try {
+			Claims claims = Jwts.parserBuilder()
+				.setSigningKey(key)
+				.build()
+				.parseClaimsJws(token)
+				.getBody();
+			return claims.get("uuid", String.class);
+		} catch (JwtException e) {
 
-		return claims.get("uuid", String.class);
+		}
+		return null;
 	}
 
 	public boolean validateToken(String authToken) {

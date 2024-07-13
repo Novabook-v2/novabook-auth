@@ -1,4 +1,4 @@
-package store.novabook.auth.dto;
+package store.novabook.auth.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

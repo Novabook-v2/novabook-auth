@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import store.novabook.auth.dto.GetNewTokenRequest;
-import store.novabook.auth.dto.GetNewTokenResponse;
+import store.novabook.auth.dto.request.GetNewTokenRequest;
+import store.novabook.auth.dto.response.GetNewTokenResponse;
 import store.novabook.auth.entity.AuthenticationInfo;
 import store.novabook.auth.jwt.TokenProvider;
 import store.novabook.auth.service.AuthenticationService;

@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import store.novabook.auth.dto.GetDormantMembersRequest;
-import store.novabook.auth.dto.GetDormantMembersResponse;
-import store.novabook.auth.dto.GetMembersStatusRequest;
-import store.novabook.auth.dto.GetMembersStatusResponse;
+import store.novabook.auth.dto.request.GetDormantMembersRequest;
+import store.novabook.auth.dto.response.GetDormantMembersResponse;
+import store.novabook.auth.dto.request.GetMembersStatusRequest;
+import store.novabook.auth.dto.response.GetMembersStatusResponse;
 import store.novabook.auth.entity.DormantMembers;
 import store.novabook.auth.jwt.TokenProvider;
 import store.novabook.auth.response.ApiResponse;

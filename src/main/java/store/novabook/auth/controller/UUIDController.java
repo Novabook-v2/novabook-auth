@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import store.novabook.auth.dto.GetDormantMembersUUIDResponse;
-import store.novabook.auth.dto.GetMembersTokenResponse;
-import store.novabook.auth.dto.GetMembersUUIDRequest;
-import store.novabook.auth.dto.GetMembersUUIDResponse;
+import store.novabook.auth.dto.response.GetDormantMembersUUIDResponse;
+import store.novabook.auth.dto.response.GetMembersTokenResponse;
+import store.novabook.auth.dto.request.GetMembersUUIDRequest;
+import store.novabook.auth.dto.response.GetMembersUUIDResponse;
 import store.novabook.auth.entity.AuthenticationInfo;
 import store.novabook.auth.jwt.TokenProvider;
 import store.novabook.auth.service.AuthenticationService;
@@ -50,14 +50,12 @@ public class UUIDController {
 		}
 
 		String uuid = null;
-		try {
-			if (tokenProvider.validateToken(accessToken)) {
-				uuid = tokenProvider.getUsernameFromToken(accessToken);
-			} else {
-				uuid = tokenProvider.getUsernameFromToken(refreshToken);
-			}
-		} catch (Exception e) {
+		if (tokenProvider.validateToken(accessToken)) {
+			uuid = tokenProvider.getUsernameFromToken(accessToken);
+		} else {
+			uuid = tokenProvider.getUsernameFromToken(refreshToken);
 		}
+
 		GetMembersTokenResponse getMembersTokenResponse = new GetMembersTokenResponse(
 			authenticationService.getAuth(uuid).getMembersId());
 		return ResponseEntity.ok(getMembersTokenResponse);

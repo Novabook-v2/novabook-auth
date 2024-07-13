@@ -10,7 +10,7 @@ import store.novabook.auth.entity.AuthenticationMembers;
 
 public class CustomUserDetails implements UserDetails {
 
-	private final AuthenticationMembers authenticationMembers;
+	private final transient AuthenticationMembers authenticationMembers;
 
 	public CustomUserDetails(AuthenticationMembers authenticationMembers) {
 		this.authenticationMembers = authenticationMembers;
@@ -19,15 +19,11 @@ public class CustomUserDetails implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> collection = new ArrayList<>();
-		collection.add(new GrantedAuthority() {
-			@Override
-			public String getAuthority() {
-				return authenticationMembers.getRole();
-			}
-		});
+		collection.add((GrantedAuthority)authenticationMembers::getRole);
 
 		return collection;
 	}
+
 	public long getMembersId() {
 		return authenticationMembers.getMembersId();
 	}

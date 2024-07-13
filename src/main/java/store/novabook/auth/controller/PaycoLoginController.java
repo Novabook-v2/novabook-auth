@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import store.novabook.auth.dto.GetPaycoMembersRequest;
-import store.novabook.auth.dto.GetPaycoMembersResponse;
-import store.novabook.auth.dto.PaycoLoginRequest;
-import store.novabook.auth.dto.PaycoLoginResponse;
+import store.novabook.auth.dto.request.GetPaycoMembersRequest;
+import store.novabook.auth.dto.response.GetPaycoMembersResponse;
+import store.novabook.auth.dto.request.PaycoLoginRequest;
+import store.novabook.auth.dto.response.PaycoLoginResponse;
 import store.novabook.auth.jwt.TokenProvider;
 import store.novabook.auth.response.ApiResponse;
 import store.novabook.auth.service.CustomMembersDetailsClient;

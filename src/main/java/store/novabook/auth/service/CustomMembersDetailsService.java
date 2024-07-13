@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import store.novabook.auth.response.ApiResponse;
 import store.novabook.auth.dto.CustomUserDetails;
-import store.novabook.auth.dto.FindMemberLoginResponse;
-import store.novabook.auth.dto.FindMembersRequest;
+import store.novabook.auth.dto.response.FindMemberLoginResponse;
+import store.novabook.auth.dto.request.FindMembersRequest;
 import store.novabook.auth.entity.AuthenticationMembers;
 
 @Service
@@ -28,9 +28,9 @@ public class CustomMembersDetailsService implements UserDetailsService {
 			findMembersRequest);
 
 		AuthenticationMembers authenticationMembers = AuthenticationMembers.of(
-			findMembersLoginResponseResponse.getBody().id(),
+			findMembersLoginResponseResponse.getBody().membersId(),
 			findMembersLoginResponseResponse.getBody().loginId(),
-			findMembersLoginResponseResponse.getBody().password(),
+			findMembersLoginResponseResponse.getBody().loginPassword(),
 			findMembersLoginResponseResponse.getBody().role()
 		);
 		return new CustomUserDetails(authenticationMembers);
