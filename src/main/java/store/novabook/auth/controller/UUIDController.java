@@ -1,7 +1,5 @@
 package store.novabook.auth.controller;
 
-import java.util.Objects;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
