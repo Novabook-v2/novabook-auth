@@ -59,7 +59,7 @@ public class TokenProvider implements InitializingBean {
 
 		Date now = new Date();
 		// Date validity = new Date(now.getTime() + jwt.tokenValidityInSeconds() * 1000);
-		Date validity = new Date(now.getTime() + 20 * 1000);
+		Date validity = new Date(now.getTime() + 60 * 1000);
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -82,7 +82,7 @@ public class TokenProvider implements InitializingBean {
 
 		Date now = new Date();
 		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
-		Date validity = new Date(now.getTime() + 20 * 1000);
+		Date validity = new Date(now.getTime() + 60 * 1000);
 
 
 		return Jwts.builder()
@@ -100,7 +100,7 @@ public class TokenProvider implements InitializingBean {
 
 		Date now = new Date();
 		// Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
-		Date validity = new Date(now.getTime() + 6000 * 1000);
+		Date validity = new Date(now.getTime() + 60000 * 1000);
 
 		String authoritiesString = "ROLE_MEMBERS";
 
@@ -118,7 +118,7 @@ public class TokenProvider implements InitializingBean {
 	public String createRefreshToken(Authentication authentication, UUID uuid) {
 
 		Date now = new Date();
-		Date validity = new Date(now.getTime() + 6000 * 1000);
+		Date validity = new Date(now.getTime() + 60000 * 1000);
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -144,7 +144,7 @@ public class TokenProvider implements InitializingBean {
 	public String createOauthRefreshToken(GetPaycoMembersResponse getPaycoMembersResponse, UUID uuid) {
 
 		Date now = new Date();
-		Date validity = new Date(now.getTime() + 6000 * 1000);
+		Date validity = new Date(now.getTime() + 60000 * 1000);
 
 		AuthenticationInfo authenticationInfo = AuthenticationInfo.of(uuid.toString(), getPaycoMembersResponse.id(), "ROLE_MEMBERS",
 			LocalDateTime.ofInstant(validity.toInstant(), ZoneId.systemDefault()));
