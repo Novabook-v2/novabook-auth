@@ -17,7 +17,7 @@ public class RedisWarmupService {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void warmup() {
-		redisTemplate.opsForValue().set("key1", "value1", Duration.ofMinutes(10));
-		redisTemplate.opsForValue().set("key2", "value2", Duration.ofMinutes(20));
+		redisTemplate.opsForValue().set("warmup-key1", "warmup-value1", Duration.ofMinutes(10));
+		redisTemplate.opsForValue().set("warmup-key2", "warmup-value2", Duration.ofMinutes(20));
 	}
 }
