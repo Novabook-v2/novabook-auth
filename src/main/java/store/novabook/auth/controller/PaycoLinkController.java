@@ -14,13 +14,13 @@ import store.novabook.auth.entity.AuthenticationInfo;
 import store.novabook.auth.jwt.TokenProvider;
 import store.novabook.auth.response.ApiResponse;
 import store.novabook.auth.service.AuthenticationService;
-import store.novabook.auth.service.CustomMembersDetailClient;
+import store.novabook.auth.service.CustomMembersDetailsClient;
 
 @RestController
 @RequiredArgsConstructor()
 @RequestMapping("/auth/payco/link")
 public class PaycoLinkController {
-	private final CustomMembersDetailClient customMembersDetailClient;
+	private final CustomMembersDetailsClient customMembersDetailsClient;
 	private final AuthenticationService authenticationService;
 	private final TokenProvider tokenProvider;
 
@@ -32,7 +32,7 @@ public class PaycoLinkController {
 		AuthenticationInfo auth = authenticationService.getAuth(uuid);
 
 		LinkPaycoMembersRequest linkPaycoMembersRequest = new LinkPaycoMembersRequest(auth.getMembersId(), linkPaycoMembersUUIDRequest.oauthId());
-		ApiResponse<Void> voidApiResponse = customMembersDetailClient.linkPayco(linkPaycoMembersRequest);
+		ApiResponse<Void> voidApiResponse = customMembersDetailsClient.linkPayco(linkPaycoMembersRequest);
 
 		return ResponseEntity.ok().build();
 	}

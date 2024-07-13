@@ -15,7 +15,7 @@ import store.novabook.auth.dto.FindMemberLoginResponse;
 import store.novabook.auth.dto.FindMembersRequest;
 
 @FeignClient(name = "customUserDetailClient", url = "http://127.0.0.1:9777/api/v1/store/members")
-public interface CustomMembersDetailClient {
+public interface CustomMembersDetailsClient {
 
 	@PostMapping("/find")
 	ApiResponse<FindMemberLoginResponse> find(@Valid @RequestBody FindMembersRequest findMembersRequest);

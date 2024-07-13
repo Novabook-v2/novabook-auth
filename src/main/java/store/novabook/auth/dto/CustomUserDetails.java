@@ -28,19 +28,18 @@ public class CustomUserDetails implements UserDetails {
 
 		return collection;
 	}
-
-	public long getId() {
-		return authenticationMembers.getId();
+	public long getMembersId() {
+		return authenticationMembers.getMembersId();
 	}
 
 	@Override
 	public String getPassword() {
-		return authenticationMembers.getPassword();
+		return authenticationMembers.getLoginPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return Long.toString(authenticationMembers.getId());
+		return authenticationMembers.getLoginId();
 	}
 
 	@Override

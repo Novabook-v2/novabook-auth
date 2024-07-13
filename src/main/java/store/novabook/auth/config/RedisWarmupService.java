@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class RedisWarmupService {
 
-	@Autowired
-	private RedisTemplate<String, Object> redisTemplate;
+	private final RedisTemplate<String, Object> redisTemplate;
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void warmup() {

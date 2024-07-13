@@ -1,6 +1,7 @@
 package store.novabook.auth.config;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -16,41 +17,22 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import store.novabook.auth.service.CustomAdminDetailsService;
 import store.novabook.auth.service.CustomMembersDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	private final CustomAdminDetailsService customAdminDetailsService;
 	private final CustomMembersDetailsService customMembersDetailsService;
 
-	public SecurityConfig(CustomAdminDetailsService customAdminDetailsService,
+	public SecurityConfig(
 		CustomMembersDetailsService customMembersDetailsService) {
-		this.customAdminDetailsService = customAdminDetailsService;
 		this.customMembersDetailsService = customMembersDetailsService;
 	}
 
 	@Bean
-	@Qualifier("adminAuthenticationManager")
-	public AuthenticationManager adminAuthenticationManager() throws Exception {
-		return new ProviderManager(Arrays.asList(adminAuthenticationProvider()));
-	}
-
-	@Bean
-	@Primary
-	@Qualifier("memberAuthenticationManager")
-	public AuthenticationManager memberAuthenticationManager() throws Exception {
-		return new ProviderManager(Arrays.asList(memberAuthenticationProvider()));
-	}
-
-	@Bean
-	public DaoAuthenticationProvider adminAuthenticationProvider() {
-		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-		provider.setUserDetailsService(customAdminDetailsService);
-		provider.setPasswordEncoder(bCryptPasswordEncoder());
-		return provider;
+	public AuthenticationManager memberAuthenticationManager() {
+		return new ProviderManager(Collections.singletonList(memberAuthenticationProvider()));
 	}
 
 	@Bean
@@ -74,7 +56,8 @@ public class SecurityConfig {
 			.httpBasic(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(authorize -> authorize
 				.requestMatchers("/", "/auth/login", "/auth/members/uuid", "/auth/refresh", "/auth/admin/login",
-					"/auth/members/token", "/auth/logout", "/auth/payco", "/auth/members/status", "/auth/members/uuid/dormant",
+					"/auth/members/token", "/auth/logout", "/auth/payco", "/auth/members/status",
+					"/auth/members/uuid/dormant",
 					"/auth/payco/link").permitAll()
 				.anyRequest().authenticated())
 			.sessionManagement(session -> session

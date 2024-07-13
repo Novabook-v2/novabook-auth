@@ -28,7 +28,7 @@ public class LoginController {
 	private final TokenProvider tokenProvider;
 
 	@Autowired
-	public LoginController(@Qualifier("memberAuthenticationManager") AuthenticationManager authenticationManager,
+	public LoginController(AuthenticationManager authenticationManager,
 		TokenProvider tokenProvider) {
 		this.authenticationManager = authenticationManager;
 		this.tokenProvider = tokenProvider;

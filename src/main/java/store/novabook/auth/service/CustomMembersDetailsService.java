@@ -1,6 +1,5 @@
 package store.novabook.auth.service;
 
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,24 +14,25 @@ import store.novabook.auth.entity.AuthenticationMembers;
 @Service
 public class CustomMembersDetailsService implements UserDetailsService {
 
-	private final CustomMembersDetailClient customMembersDetailClient;
+	private final CustomMembersDetailsClient customMembersDetailsClient;
 
-	public CustomMembersDetailsService(CustomMembersDetailClient customMembersDetailClient) {
-		this.customMembersDetailClient = customMembersDetailClient;
+	public CustomMembersDetailsService(CustomMembersDetailsClient customMembersDetailsClient) {
+		this.customMembersDetailsClient = customMembersDetailsClient;
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		FindMembersRequest findMembersRequest = new FindMembersRequest(username);
 
-		ApiResponse<FindMemberLoginResponse> findMembersLoginResponseResponse = customMembersDetailClient.find(
+		ApiResponse<FindMemberLoginResponse> findMembersLoginResponseResponse = customMembersDetailsClient.find(
 			findMembersRequest);
 
-		AuthenticationMembers authenticationMembers = new AuthenticationMembers();
-		authenticationMembers.setId(findMembersLoginResponseResponse.getBody().id());
-		authenticationMembers.setUsername(findMembersLoginResponseResponse.getBody().loginId());
-		authenticationMembers.setPassword(findMembersLoginResponseResponse.getBody().password());
-		authenticationMembers.setRole(findMembersLoginResponseResponse.getBody().role());
+		AuthenticationMembers authenticationMembers = AuthenticationMembers.of(
+			findMembersLoginResponseResponse.getBody().id(),
+			findMembersLoginResponseResponse.getBody().loginId(),
+			findMembersLoginResponseResponse.getBody().password(),
+			findMembersLoginResponseResponse.getBody().role()
+		);
 		return new CustomUserDetails(authenticationMembers);
 	}
 }

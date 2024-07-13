@@ -21,6 +21,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import store.novabook.auth.dto.CustomUserDetails;
 import store.novabook.auth.dto.GetPaycoMembersResponse;
 import store.novabook.auth.entity.AuthenticationInfo;
 import store.novabook.auth.service.AuthenticationService;
@@ -28,7 +29,6 @@ import store.novabook.auth.util.KeyManagerUtil;
 import store.novabook.auth.util.dto.JWTConfigDto;
 
 @Component
-// @RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
 	private Key key;
@@ -126,7 +126,9 @@ public class TokenProvider implements InitializingBean {
 			.map(GrantedAuthority::getAuthority)
 			.collect(Collectors.joining(","));
 
-		AuthenticationInfo authenticationInfo = AuthenticationInfo.of(uuid.toString(), Long.parseLong(authentication.getName()), authoritiesString,
+		CustomUserDetails principal = (CustomUserDetails)authentication.getPrincipal();
+
+		AuthenticationInfo authenticationInfo = AuthenticationInfo.of(uuid.toString(), principal.getMembersId(), authoritiesString,
 			LocalDateTime.ofInstant(validity.toInstant(), ZoneId.systemDefault()));
 		authenticationService.saveAuth(authenticationInfo);
 

@@ -2,11 +2,7 @@ package store.novabook.auth.controller;
 
 import java.util.UUID;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +16,7 @@ import store.novabook.auth.dto.PaycoLoginRequest;
 import store.novabook.auth.dto.PaycoLoginResponse;
 import store.novabook.auth.jwt.TokenProvider;
 import store.novabook.auth.response.ApiResponse;
-import store.novabook.auth.service.CustomMembersDetailClient;
+import store.novabook.auth.service.CustomMembersDetailsClient;
 
 @RestController
 @RequiredArgsConstructor()
@@ -28,12 +24,12 @@ import store.novabook.auth.service.CustomMembersDetailClient;
 public class PaycoLoginController {
 
 	private final TokenProvider tokenProvider;
-	private final CustomMembersDetailClient customMembersDetailClient;
+	private final CustomMembersDetailsClient customMembersDetailsClient;
 
 	@PostMapping
 	public ResponseEntity<PaycoLoginResponse> paycoLogin(@Valid @RequestBody PaycoLoginRequest paycoLoginRequest) {
 		GetPaycoMembersRequest getPaycoMembersRequest = new GetPaycoMembersRequest(paycoLoginRequest.paycoId());
-		ApiResponse<GetPaycoMembersResponse> paycoMembers = customMembersDetailClient.getPaycoMembers(
+		ApiResponse<GetPaycoMembersResponse> paycoMembers = customMembersDetailsClient.getPaycoMembers(
 			getPaycoMembersRequest);
 		if (paycoMembers.getBody() == null) {
 			return ResponseEntity.ok().build();
