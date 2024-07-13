@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import store.novabook.auth.dto.FindMembersRequest;
 import store.novabook.auth.dto.LinkPaycoMembersRequest;
 import store.novabook.auth.dto.LinkPaycoMembersUUIDRequest;
 import store.novabook.auth.entity.AuthenticationInfo;

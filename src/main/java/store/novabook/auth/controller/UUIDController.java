@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import store.novabook.auth.dto.GetDormantMembersUUIDResponse;
 import store.novabook.auth.dto.GetMembersTokenResponse;
 import store.novabook.auth.dto.GetMembersUUIDRequest;
 import store.novabook.auth.dto.GetMembersUUIDResponse;
+import store.novabook.auth.entity.AuthenticationInfo;
 import store.novabook.auth.jwt.TokenProvider;
 import store.novabook.auth.service.AuthenticationService;
 
@@ -26,17 +28,18 @@ public class UUIDController {
 
 	@PostMapping("/uuid")
 	public ResponseEntity<GetMembersUUIDResponse> uuid(@RequestBody GetMembersUUIDRequest getMembersUuidRequest) {
+		AuthenticationInfo authenticationInfo = authenticationService.getAuth(getMembersUuidRequest.uuid());
 		GetMembersUUIDResponse getMembersUUIDResponse = new GetMembersUUIDResponse(
-			Long.toString(authenticationService.getAuth(getMembersUuidRequest.uuid()).getMembersId()));
+			authenticationInfo.getMembersId(), authenticationInfo.getRole());
 		return ResponseEntity.ok(getMembersUUIDResponse);
 	}
 
-
 	@PostMapping("/uuid/dormant")
-	public ResponseEntity<GetMembersUUIDResponse> dormantUuid(@RequestBody GetMembersUUIDRequest getMembersUuidRequest) {
-		GetMembersUUIDResponse getMembersUUIDResponse = new GetMembersUUIDResponse(
-			Long.toString(authenticationService.getDormant(getMembersUuidRequest.uuid()).getMembersId()));
-		return ResponseEntity.ok(getMembersUUIDResponse);
+	public ResponseEntity<GetDormantMembersUUIDResponse> dormantUuid(
+		@RequestBody GetMembersUUIDRequest getMembersUuidRequest) {
+		GetDormantMembersUUIDResponse getDormantMembersUUIDResponse = new GetDormantMembersUUIDResponse(
+			authenticationService.getDormant(getMembersUuidRequest.uuid()).getMembersId());
+		return ResponseEntity.ok(getDormantMembersUUIDResponse);
 	}
 
 	@PostMapping("/token")
