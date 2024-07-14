@@ -29,8 +29,8 @@ public class AuthenticationService {
 
 	public AuthenticationInfo getAuth(String uuid) {
 		Object object = redisTemplate.opsForValue().get(uuid);
-		if (object instanceof AuthenticationInfo) {
-			return (AuthenticationInfo)object;
+		if (object instanceof AuthenticationInfo authenticationInfo) {
+			return authenticationInfo;
 		} else {
 			throw new IllegalArgumentException("No auth found with uuid: " + uuid);
 		}
@@ -64,8 +64,8 @@ public class AuthenticationService {
 
 	public DormantMembers getDormant(String uuid) {
 		Object object = redisTemplate.opsForValue().get(uuid);
-		if (object instanceof DormantMembers) {
-			return (DormantMembers)object;
+		if (object instanceof DormantMembers dormantMembers) {
+			return dormantMembers;
 		} else {
 			throw new IllegalArgumentException("No dormant found with uuid: " + uuid);
 		}
