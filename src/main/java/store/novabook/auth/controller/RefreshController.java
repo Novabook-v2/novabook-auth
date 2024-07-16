@@ -29,7 +29,7 @@ public class RefreshController {
 	public ResponseEntity<GetNewTokenResponse> getNewToken(@Valid @RequestBody GetNewTokenRequest getNewTokenRequest) {
 
 		String refreshToken = getNewTokenRequest.refreshToken().replace("Bearer ", "");
-		String uuid = tokenProvider.getUsernameFromToken(refreshToken);
+		String uuid = tokenProvider.getUUID(refreshToken);
 		AuthenticationInfo authenticationInfo = authenticationService.getAuth(uuid);
 
 		LocalDateTime expirationTime = authenticationInfo.getExpirationTime();

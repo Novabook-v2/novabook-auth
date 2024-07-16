@@ -17,6 +17,7 @@ import store.novabook.auth.jwt.TokenProvider;
 import store.novabook.auth.response.ApiResponse;
 import store.novabook.auth.service.AuthenticationService;
 import store.novabook.auth.service.CustomMembersDetailsClient;
+import store.novabook.auth.service.JWTTokenService;
 
 @RestController
 @RequestMapping("/auth/members/status")
@@ -24,6 +25,7 @@ import store.novabook.auth.service.CustomMembersDetailsClient;
 public class StatusController {
 
 	private final AuthenticationService authenticationService;
+	private final JWTTokenService jwtTokenService;
 	private final CustomMembersDetailsClient customMembersDetailsClient;
 	private final TokenProvider tokenProvider;
 
@@ -31,8 +33,9 @@ public class StatusController {
 	public ResponseEntity<GetMembersStatusResponse> status(
 		@Valid @RequestBody GetMembersStatusRequest getMembersStatusRequest) {
 
-		String uuid = tokenProvider.getUsernameFromToken(getMembersStatusRequest.accessToken());
-		long membersId = authenticationService.getAuth(uuid).getMembersId();
+		String uuid = tokenProvider.getUUID(getMembersStatusRequest.accessToken());
+		// long membersId = jwtTokenService.getMembersInfo(uuid).getMembersId();
+		long membersId = 3L;
 		GetDormantMembersRequest getDormantMembersRequest = new GetDormantMembersRequest(membersId);
 
 		ApiResponse<GetDormantMembersResponse> getDormantMembersResponse = customMembersDetailsClient.getMemberDormantStatus(

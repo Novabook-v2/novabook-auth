@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import store.novabook.auth.dto.response.GetDormantMembersUUIDResponse;
 import store.novabook.auth.dto.response.GetMembersTokenResponse;
@@ -25,7 +26,8 @@ public class UUIDController {
 	private final TokenProvider tokenProvider;
 
 	@PostMapping("/uuid")
-	public ResponseEntity<GetMembersUUIDResponse> uuid(@RequestBody GetMembersUUIDRequest getMembersUuidRequest) {
+	public ResponseEntity<GetMembersUUIDResponse> getMembersId(
+		@Valid @RequestBody GetMembersUUIDRequest getMembersUuidRequest) {
 		AuthenticationInfo authenticationInfo = authenticationService.getAuth(getMembersUuidRequest.uuid());
 		GetMembersUUIDResponse getMembersUUIDResponse = new GetMembersUUIDResponse(
 			authenticationInfo.getMembersId(), authenticationInfo.getRole());
@@ -33,8 +35,8 @@ public class UUIDController {
 	}
 
 	@PostMapping("/uuid/dormant")
-	public ResponseEntity<GetDormantMembersUUIDResponse> dormantUuid(
-		@RequestBody GetMembersUUIDRequest getMembersUuidRequest) {
+	public ResponseEntity<GetDormantMembersUUIDResponse> getDormantMembersId(
+		@Valid @RequestBody GetMembersUUIDRequest getMembersUuidRequest) {
 		GetDormantMembersUUIDResponse getDormantMembersUUIDResponse = new GetDormantMembersUUIDResponse(
 			authenticationService.getDormant(getMembersUuidRequest.uuid()).getMembersId());
 		return ResponseEntity.ok(getDormantMembersUUIDResponse);
@@ -51,9 +53,9 @@ public class UUIDController {
 
 		String uuid = null;
 		if (tokenProvider.validateToken(accessToken)) {
-			uuid = tokenProvider.getUsernameFromToken(accessToken);
+			uuid = tokenProvider.getUUID(accessToken);
 		} else {
-			uuid = tokenProvider.getUsernameFromToken(refreshToken);
+			uuid = tokenProvider.getUUID(refreshToken);
 		}
 
 		GetMembersTokenResponse getMembersTokenResponse = new GetMembersTokenResponse(

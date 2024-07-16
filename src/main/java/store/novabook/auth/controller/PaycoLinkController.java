@@ -27,7 +27,7 @@ public class PaycoLinkController {
 	@PostMapping
 	public ResponseEntity<Void> paycoLink(@Valid @RequestBody LinkPaycoMembersUUIDRequest linkPaycoMembersUUIDRequest) {
 
-		String uuid = tokenProvider.getUsernameFromToken(linkPaycoMembersUUIDRequest.accessToken());
+		String uuid = tokenProvider.getUUID(linkPaycoMembersUUIDRequest.accessToken());
 
 		AuthenticationInfo auth = authenticationService.getAuth(uuid);
 

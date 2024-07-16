@@ -22,7 +22,9 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import store.novabook.auth.dto.CustomUserDetails;
 import store.novabook.auth.dto.response.GetPaycoMembersResponse;
+import store.novabook.auth.entity.AccessTokenInfo;
 import store.novabook.auth.entity.AuthenticationInfo;
+import store.novabook.auth.entity.RefreshTokenInfo;
 import store.novabook.auth.service.AuthenticationService;
 import store.novabook.auth.util.KeyManagerUtil;
 import store.novabook.auth.util.dto.JWTConfigDto;
@@ -53,8 +55,6 @@ public class TokenProvider implements InitializingBean {
 		this.key = Keys.hmacShaKeyFor(keyBytes);
 	}
 
-
-
 	public String createAccessToken(Authentication authentication, UUID uuid) {
 
 		Date now = new Date();
@@ -81,7 +81,6 @@ public class TokenProvider implements InitializingBean {
 
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + 60 * 1000);
-
 
 		return Jwts.builder()
 			.setHeaderParam("typ", "JWT")
@@ -110,6 +109,22 @@ public class TokenProvider implements InitializingBean {
 			.compact();
 	}
 
+	public String createAccessToken(UUID uuid) {
+		return Jwts.builder()
+			.setHeaderParam("typ", "JWT")
+			.claim(UUID, uuid.toString())
+			.signWith(key, SignatureAlgorithm.HS256)
+			.compact();
+	}
+
+	public String createRefreshToken(UUID uuid) {
+		return Jwts.builder()
+			.setHeaderParam("typ", "JWT")
+			.claim(UUID, uuid.toString())
+			.signWith(key, SignatureAlgorithm.HS256)
+			.compact();
+	}
+
 	public String createRefreshToken(Authentication authentication, UUID uuid) {
 
 		Date now = new Date();
@@ -123,7 +138,8 @@ public class TokenProvider implements InitializingBean {
 
 		CustomUserDetails principal = (CustomUserDetails)authentication.getPrincipal();
 
-		AuthenticationInfo authenticationInfo = AuthenticationInfo.of(uuid.toString(), principal.getMembersId(), authoritiesString,
+		AuthenticationInfo authenticationInfo = AuthenticationInfo.of(uuid.toString(), principal.getMembersId(),
+			authoritiesString,
 			LocalDateTime.ofInstant(validity.toInstant(), ZoneId.systemDefault()));
 		authenticationService.saveAuth(authenticationInfo);
 
@@ -143,7 +159,8 @@ public class TokenProvider implements InitializingBean {
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + 60000 * 1000);
 
-		AuthenticationInfo authenticationInfo = AuthenticationInfo.of(uuid.toString(), getPaycoMembersResponse.id(), ROLE_MEMBERS,
+		AuthenticationInfo authenticationInfo = AuthenticationInfo.of(uuid.toString(), getPaycoMembersResponse.id(),
+			ROLE_MEMBERS,
 			LocalDateTime.ofInstant(validity.toInstant(), ZoneId.systemDefault()));
 		authenticationService.saveAuth(authenticationInfo);
 
@@ -158,7 +175,7 @@ public class TokenProvider implements InitializingBean {
 			.compact();
 	}
 
-	public String getUsernameFromToken(String token) {
+	public String getUUID(String token) {
 		try {
 			Claims claims = Jwts.parserBuilder()
 				.setSigningKey(key)
