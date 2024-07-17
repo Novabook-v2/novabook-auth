@@ -16,7 +16,7 @@ import store.novabook.auth.response.ErrorResponse;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(BadCredentialsException.class)
-	public ResponseEntity<ErrorResponse> handleUnauthorizedException(BadCredentialsException exception) {
+	public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException exception) {
 		log.error("BadCredentialsException: {} | Location: {}", exception.getMessage(), getLocation(exception),
 			exception);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.from(ErrorCode.CANNOT_LOGIN));
