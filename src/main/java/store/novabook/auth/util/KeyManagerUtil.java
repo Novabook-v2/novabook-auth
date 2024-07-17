@@ -3,6 +3,7 @@ package store.novabook.auth.util;
 import static store.novabook.auth.exception.ErrorCode.*;
 
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
@@ -36,7 +37,7 @@ public class KeyManagerUtil {
 
 		RestTemplate restTemplate = new RestTemplate();
 		String baseUrl = "https://api-keymanager.nhncloudservice.com/keymanager/v1.2/appkey/{appkey}/secrets/{keyid}";
-		String url = baseUrl.replace("{appkey}", appkey).replace("{keyid}", keyid);
+		String url = baseUrl.replace("{appkey}", Objects.requireNonNull(appkey)).replace("{keyid}", keyid);
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("X-TC-AUTHENTICATION-ID", userId);
 		headers.set("X-TC-AUTHENTICATION-SECRET", secretKey);
@@ -44,22 +45,13 @@ public class KeyManagerUtil {
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 
 		ResponseEntity<Map<String, Object>> response = restTemplate.exchange(url, HttpMethod.GET, entity,
-			new ParameterizedTypeReference<Map<String, Object>>() {
+			new ParameterizedTypeReference<>() {
 			});
 
-		var body = getStringObjectMap(response);
-
-		String result = (String)body.get("secret");
-		if (result.isEmpty()) {
-			log.error("\"secret\" key is missing in responsxcle body");
-			log.error("{}", body);
-			throw new KeyManagerException(MISSING_BODY_KEY);
-		}
-
-		return result;
+		return getStringObjectMap(response);
 	}
 
-	private static @NotNull Map<String, Object> getStringObjectMap(ResponseEntity<Map<String, Object>> response) {
+	private static @NotNull String getStringObjectMap(ResponseEntity<Map<String, Object>> response) {
 		if (response.getBody() == null) {
 			throw new KeyManagerException(RESPONSE_BODY_IS_NULL);
 		}
@@ -69,10 +61,17 @@ public class KeyManagerUtil {
 		try {
 			body = TypeUtil.castMap(bodyObj, String.class, Object.class);
 		} catch (ClassCastException e) {
-			throw new KeyManagerException( MISSING_BODY_KEY);
+			throw new KeyManagerException(MISSING_BODY_KEY);
 		}
 
-		return body;
+		String result = (String)body.get("secret");
+		if (result.isEmpty()) {
+			log.error("\"secret\" key is missing in responsxcle body");
+			log.error("{}", body);
+			throw new KeyManagerException(MISSING_BODY_KEY);
+		}
+
+		return result;
 	}
 
 
