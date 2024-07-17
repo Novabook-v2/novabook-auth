@@ -11,7 +11,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.util.annotation.Nullable;
-import store.novabook.auth.service.ValidErrorResponse;
 
 @Slf4j
 @RestControllerAdvice(basePackages = {"store.novabook.auth"})

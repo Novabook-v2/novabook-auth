@@ -8,32 +8,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import store.novabook.auth.dto.request.LinkPaycoMembersRequest;
 import store.novabook.auth.dto.request.LinkPaycoMembersUUIDRequest;
-import store.novabook.auth.entity.AuthenticationInfo;
-import store.novabook.auth.jwt.TokenProvider;
-import store.novabook.auth.response.ApiResponse;
-import store.novabook.auth.service.AuthenticationService;
-import store.novabook.auth.service.CustomMembersDetailsClient;
+import store.novabook.auth.service.PaycoService;
 
 @RestController
 @RequiredArgsConstructor()
 @RequestMapping("/auth/payco/link")
 public class PaycoLinkController {
-	private final CustomMembersDetailsClient customMembersDetailsClient;
-	private final AuthenticationService authenticationService;
-	private final TokenProvider tokenProvider;
+
+	private final PaycoService paycoService;
 
 	@PostMapping
 	public ResponseEntity<Void> paycoLink(@Valid @RequestBody LinkPaycoMembersUUIDRequest linkPaycoMembersUUIDRequest) {
-
-		String uuid = tokenProvider.getUUID(linkPaycoMembersUUIDRequest.accessToken());
-
-		AuthenticationInfo auth = authenticationService.getAuth(uuid);
-
-		LinkPaycoMembersRequest linkPaycoMembersRequest = new LinkPaycoMembersRequest(auth.getMembersId(), linkPaycoMembersUUIDRequest.oauthId());
-		ApiResponse<Void> voidApiResponse = customMembersDetailsClient.linkPayco(linkPaycoMembersRequest);
-
-		return ResponseEntity.ok().build();
+		if (paycoService.paycoLink(linkPaycoMembersUUIDRequest)) {
+			return ResponseEntity.ok().build();
+		} else {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 }

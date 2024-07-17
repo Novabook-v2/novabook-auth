@@ -28,6 +28,10 @@ public class CustomUserDetails implements UserDetails {
 		return authenticationMembers.getMembersId();
 	}
 
+	public String getRole() {
+		return authenticationMembers.getRole();
+	}
+
 	@Override
 	public String getPassword() {
 		return authenticationMembers.getLoginPassword();
@@ -58,7 +62,4 @@ public class CustomUserDetails implements UserDetails {
 		return true;
 	}
 
-	public Object getDetails() {
-		return authenticationMembers;
-	}
 }

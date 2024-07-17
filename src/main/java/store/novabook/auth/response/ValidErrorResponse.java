@@ -1,4 +1,4 @@
-package store.novabook.auth.service;
+package store.novabook.auth.response;
 
 import static java.util.stream.Collectors.*;
 

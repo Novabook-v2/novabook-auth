@@ -10,7 +10,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import store.novabook.auth.dto.request.IsExpireAccessTokenRequest;
 import store.novabook.auth.dto.response.IsExpireAccessTokenResponse;
-import store.novabook.auth.jwt.TokenProvider;
 import store.novabook.auth.service.AuthenticationService;
 
 @RestController
@@ -19,15 +18,10 @@ import store.novabook.auth.service.AuthenticationService;
 public class ExpireController {
 
 	private final AuthenticationService authenticationService;
-	private final TokenProvider tokenProvider;
 
 	@PostMapping()
 	ResponseEntity<IsExpireAccessTokenResponse> expire(
 		@Valid @RequestBody IsExpireAccessTokenRequest isExpireAccessTokenRequest) {
-		String uuid = tokenProvider.getUUID(isExpireAccessTokenRequest.accessToken());
-		if (!authenticationService.existsByUuid(uuid)) {
-			return ResponseEntity.ok(new IsExpireAccessTokenResponse(true));
-		}
-		return ResponseEntity.ok(new IsExpireAccessTokenResponse(false));
+		return ResponseEntity.ok(authenticationService.isExpireAccessToken(isExpireAccessTokenRequest));
 	}
 }

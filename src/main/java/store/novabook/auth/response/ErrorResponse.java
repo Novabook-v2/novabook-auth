@@ -6,7 +6,6 @@ import org.springframework.http.ProblemDetail;
 
 import store.novabook.auth.exception.ErrorCode;
 import store.novabook.auth.exception.NovaException;
-import store.novabook.auth.service.ValidErrorResponse;
 
 /**
  * 에러 응답을 나타내는 레코드입니다.
