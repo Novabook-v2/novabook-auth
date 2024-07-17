@@ -113,7 +113,7 @@ public class TokenService {
 
 	public RefreshTokenInfo createRefreshTokenInfo(CustomUserDetails principal) {
 		Date now = new Date();
-		Date refreshValidity = new Date(now.getTime() + 5 * 1000);
+		Date refreshValidity = new Date(now.getTime() + 12000 * 1000);
 
 		String refreshTokenUUID = UUID.randomUUID().toString();
 
@@ -124,7 +124,7 @@ public class TokenService {
 
 	public AccessTokenInfo createAccessTokenInfo(CustomUserDetails principal, RefreshTokenInfo refreshTokenInfo) {
 		Date now = new Date();
-		Date accessValidity = new Date(now.getTime() + 5 * 1000);
+		Date accessValidity = new Date(now.getTime() + 300 * 1000);
 
 		String accessTokenUUID = UUID.randomUUID().toString();
 
@@ -133,9 +133,20 @@ public class TokenService {
 			LocalDateTime.ofInstant(accessValidity.toInstant(), ZoneId.systemDefault()));
 	}
 
+	public AccessTokenInfo createAccessTokenInfo(RefreshTokenInfo refreshTokenInfo) {
+		Date now = new Date();
+		Date accessValidity = new Date(now.getTime() + 300 * 1000);
+
+		String accessTokenUUID = UUID.randomUUID().toString();
+
+		return AccessTokenInfo.of(accessTokenUUID, refreshTokenInfo.getUuid(),
+			refreshTokenInfo.getMembersId(), refreshTokenInfo.getRole(),
+			LocalDateTime.ofInstant(accessValidity.toInstant(), ZoneId.systemDefault()));
+	}
+
 	public RefreshTokenInfo createPaycoRefreshTokenInfo(long membersId) {
 		Date now = new Date();
-		Date refreshValidity = new Date(now.getTime() + 10 * 1000);
+		Date refreshValidity = new Date(now.getTime() + 12000 * 1000);
 
 		String refreshTokenUUID = UUID.randomUUID().toString();
 
@@ -146,7 +157,7 @@ public class TokenService {
 
 	public AccessTokenInfo createPaycoAccessTokenInfo(long membersId, RefreshTokenInfo refreshTokenInfo) {
 		Date now = new Date();
-		Date accessValidity = new Date(now.getTime() + 10 * 1000);
+		Date accessValidity = new Date(now.getTime() + 300 * 1000);
 
 		String accessTokenUUID = UUID.randomUUID().toString();
 

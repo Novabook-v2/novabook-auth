@@ -91,12 +91,7 @@ public class AuthenticationService {
 			return new GetNewTokenResponse("expired");
 		}
 
-		Date now = new Date();
-		Date accessValidity = new Date(now.getTime() + 60 * 1000);
-
-		AccessTokenInfo accessTokenInfo = AccessTokenInfo.of(UUID.randomUUID().toString(), refreshTokenInfo.getUuid(),
-			refreshTokenInfo.getMembersId(), refreshTokenInfo.getRole(),
-			LocalDateTime.ofInstant(accessValidity.toInstant(), ZoneId.systemDefault()));
+		AccessTokenInfo accessTokenInfo = tokenService.createAccessTokenInfo(refreshTokenInfo);
 
 		tokenService.changeAccessToken(refreshTokenInfo, accessTokenInfo);
 
