@@ -88,7 +88,12 @@ public enum ErrorCode {
 	COUPON_NOT_FOUND("해당 쿠폰이 존재하지 않습니다."),
 	BOOK_COUPON_NOT_FOUND("해당 도서에 대한 쿠폰이 존재하지 않습니다."),
 	CATEGORY_COUPON_NOT_FOUND("해당 카테고리에 대한 쿠폰이 존재하지 않습니다."),
-	COUPON_TEMPLATE_NOT_FOUND("해당 쿠폰 템플릿이 존재하지 않습니다.");
+	COUPON_TEMPLATE_NOT_FOUND("해당 쿠폰 템플릿이 존재하지 않습니다."),
+
+	FAILED_CONVERSION("Dto로 변환 하는데 실패했습니다."),
+	RESPONSE_BODY_IS_NULL("키매니저의 response body가 null입니다."),
+	MISSING_BODY_KEY("응답 본문에 \"body\" 키가 누락되었습니다."),
+	MISSING_SECRET_KEY("응답 본문에 \"secret\" 키가 누락되었습니다.");
 
 	private final String message;
 
