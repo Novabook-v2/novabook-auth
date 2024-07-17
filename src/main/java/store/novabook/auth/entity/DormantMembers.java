@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @RedisHash("DormantMembers")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DormantMembers {
