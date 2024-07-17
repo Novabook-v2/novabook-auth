@@ -19,7 +19,7 @@ import store.novabook.auth.util.dto.RedisConfigDto;
 public class KeyManagerUtil {
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 
-	private KeyManagerUtil() {
+	public KeyManagerUtil() {
 	}
 
 	private static String getDataSource(Environment environment, String keyid) {
