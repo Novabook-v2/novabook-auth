@@ -3,22 +3,25 @@ package store.novabook.auth.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import store.novabook.auth.dto.request.LoginMembersRequest;
-import store.novabook.auth.dto.response.LoginMembersResponse;
+import store.novabook.auth.dto.request.IsExpireAccessTokenRequest;
+import store.novabook.auth.dto.response.IsExpireAccessTokenResponse;
 import store.novabook.auth.service.AuthenticationService;
 
 @RestController
+@RequestMapping("/auth/expire")
 @RequiredArgsConstructor
-public class LoginController {
+public class ExpireController {
 
 	private final AuthenticationService authenticationService;
 
-	@PostMapping("/auth/login")
-	public ResponseEntity<LoginMembersResponse> login(@Valid @RequestBody LoginMembersRequest loginMembersRequest) {
-		return ResponseEntity.ok().body(authenticationService.login(loginMembersRequest));
+	@PostMapping()
+	ResponseEntity<IsExpireAccessTokenResponse> expire(
+		@Valid @RequestBody IsExpireAccessTokenRequest isExpireAccessTokenRequest) {
+		return ResponseEntity.ok(authenticationService.isExpireAccessToken(isExpireAccessTokenRequest));
 	}
 }

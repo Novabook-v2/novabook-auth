@@ -13,8 +13,6 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import lombok.RequiredArgsConstructor;
 import store.novabook.auth.util.KeyManagerUtil;
@@ -25,6 +23,7 @@ import store.novabook.auth.util.dto.RedisConfigDto;
 @RequiredArgsConstructor
 public class RedisConfig {
 	private final Environment env;
+	private final ObjectMapper objectMapper;
 
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
@@ -40,27 +39,23 @@ public class RedisConfig {
 	}
 
 	@Bean
-	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
 		RedisTemplate<String, Object> template = new RedisTemplate<>();
-		template.setConnectionFactory(redisConnectionFactory);
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule());
-		BasicPolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
-			.allowIfBaseType(Object.class)
-			.build();
-
-		objectMapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL);
-
-		GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
-
+		template.setConnectionFactory(connectionFactory);
 		template.setKeySerializer(new StringRedisSerializer());
-		template.setValueSerializer(serializer);
-		template.setHashKeySerializer(new StringRedisSerializer());
-		template.setHashValueSerializer(serializer);
-
-		template.afterPropertiesSet();
+		template.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
 		return template;
 	}
+
+	// @Bean
+	// public RedisTemplate<String, Object> redisTemplate() {
+	// 	RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+	// 	redisTemplate.setKeySerializer(new StringRedisSerializer());
+	// 	redisTemplate.setValueSerializer(new StringRedisSerializer());
+	// 	redisTemplate.setConnectionFactory(redisConnectionFactory());
+	// 	redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+	// 	redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+	// 	return redisTemplate;
+	// }
 
 }

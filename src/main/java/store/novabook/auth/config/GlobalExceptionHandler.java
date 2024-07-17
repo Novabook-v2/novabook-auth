@@ -1,4 +1,4 @@
-package store.novabook.auth.service;
+package store.novabook.auth.config;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
