@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -37,12 +38,14 @@ public class TokenService {
 
 	public AccessTokenInfo getAccessToken(String uuid) {
 		Object object = redisTemplate.opsForValue().get(uuid);
+		String jsonString = null;
 		try {
-			String jsonString = objectMapper.writeValueAsString(object);
+			jsonString = objectMapper.writeValueAsString(object);
 			return objectMapper.readValue(jsonString, AccessTokenInfo.class);
-		} catch (Exception e) {
-			throw new IllegalArgumentException("Failed to deserialize access token with uuid: " + uuid, e);
+		} catch (JsonProcessingException e) {
+			throw new IllegalArgumentException();
 		}
+
 	}
 
 	public RefreshTokenInfo getRefreshToken(String uuid) {
@@ -50,7 +53,7 @@ public class TokenService {
 		try {
 			String jsonString = objectMapper.writeValueAsString(object);
 			return objectMapper.readValue(jsonString, RefreshTokenInfo.class);
-		} catch (Exception e) {
+		} catch (JsonProcessingException e) {
 			throw new IllegalArgumentException("Failed to deserialize refresh token with uuid: " + uuid, e);
 		}
 

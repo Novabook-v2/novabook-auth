@@ -15,6 +15,7 @@ import store.novabook.auth.dto.response.FindMemberLoginResponse;
 import store.novabook.auth.dto.request.FindMembersRequest;
 
 @FeignClient(name = "customUserDetailClient", url = "http://127.0.0.1:9777/api/v1/store/members")
+// @FeignClient(name = "gateway-service", url = "/api/v1/store/members", contextId = "customMembersDetailsClient")
 public interface CustomMembersDetailsClient {
 
 	@PostMapping("/find")

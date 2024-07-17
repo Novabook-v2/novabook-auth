@@ -1,5 +1,7 @@
 package store.novabook.auth.service;
 
+import java.util.Objects;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,6 +28,9 @@ public class CustomMembersDetailsService implements UserDetailsService {
 
 		ApiResponse<FindMemberLoginResponse> findMembersLoginResponseResponse = customMembersDetailsClient.find(
 			findMembersRequest);
+		if (Objects.isNull(findMembersLoginResponseResponse.getBody())) {
+			throw new UsernameNotFoundException("User not found");
+		}
 
 		AuthenticationMembers authenticationMembers = AuthenticationMembers.of(
 			findMembersLoginResponseResponse.getBody().membersId(),

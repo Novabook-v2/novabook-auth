@@ -36,7 +36,7 @@ public class PaycoService {
 		LinkPaycoMembersRequest linkPaycoMembersRequest = new LinkPaycoMembersRequest(accessTokenInfo.getMembersId(),
 			linkPaycoMembersUUIDRequest.oauthId());
 		ApiResponse<Void> apiResponse = customMembersDetailsClient.linkPayco(linkPaycoMembersRequest);
-		if (apiResponse != null) {
+		if (apiResponse.getHeader().get("resultMessage").equals("SUCCESS")) {
 			return true;
 		} else {
 			return false;
