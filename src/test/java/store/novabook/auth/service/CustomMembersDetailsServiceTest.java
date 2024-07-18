@@ -1,25 +1,22 @@
 package store.novabook.auth.service;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
+import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import store.novabook.auth.dto.CustomUserDetails;
-import store.novabook.auth.dto.response.FindMemberLoginResponse;
 import store.novabook.auth.dto.request.FindMembersRequest;
-import store.novabook.auth.entity.AuthenticationMembers;
+import store.novabook.auth.dto.response.FindMemberLoginResponse;
 import store.novabook.auth.response.ApiResponse;
 
-public class CustomMembersDetailsServiceTest {
+class CustomMembersDetailsServiceTest {
 
 	@Mock
 	private CustomMembersDetailsClient customMembersDetailsClient;
