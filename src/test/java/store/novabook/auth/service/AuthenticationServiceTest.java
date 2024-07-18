@@ -360,7 +360,7 @@ class AuthenticationServiceTest {
 		 GetMembersStatusResponse response = authenticationService.getMembersStatus(request);
 
 		 // then
-		 assertThat(response.memberStatusId()).isEqualTo(0);
+		 assertThat(response.memberStatusId()).isZero();
 	 }
 
 
@@ -505,7 +505,7 @@ class AuthenticationServiceTest {
 		GetMembersStatusResponse response = authenticationService.getMembersStatus(request);
 
 		// then
-		assertThat(response.memberStatusId()).isEqualTo(0);
+		assertThat(response.memberStatusId()).isZero();
 		assertThat(response.uuid()).isNull();
 
 		// Verify no interaction with saveDormant and deleteAllTokensByAccessToken

@@ -24,7 +24,7 @@ import store.novabook.auth.entity.AccessTokenInfo;
 import store.novabook.auth.entity.DormantMembers;
 import store.novabook.auth.entity.RefreshTokenInfo;
 
-public class TokenServiceTest {
+class TokenServiceTest {
 
 	@Mock
 	private RedisTemplate<String, Object> redisTemplate;
@@ -181,11 +181,6 @@ public class TokenServiceTest {
 
 		// when
 		tokenService.saveDormant(dormantMembers);
-
-		// then
-		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime expirationTime = now.plusMinutes(300);
-		Duration duration = Duration.between(now, expirationTime);
 
 		verify(redisTemplate).opsForValue();
 	}

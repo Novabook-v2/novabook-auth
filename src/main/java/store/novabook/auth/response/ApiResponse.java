@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ApiResponse<T> implements Serializable {
 
 	private final Map<String, Object> header = new HashMap<>();
-	private final T body;
+	private final transient T body;
 
 	/**
 	 * {@code ApiResponse} 생성자는 응답의 헤더와 본문을 초기화합니다.
