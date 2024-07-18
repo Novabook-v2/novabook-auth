@@ -1,11 +1,7 @@
 package store.novabook.auth.service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.UUID;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -36,11 +32,7 @@ public class PaycoService {
 		LinkPaycoMembersRequest linkPaycoMembersRequest = new LinkPaycoMembersRequest(accessTokenInfo.getMembersId(),
 			linkPaycoMembersUUIDRequest.oauthId());
 		ApiResponse<Void> apiResponse = customMembersDetailsClient.linkPayco(linkPaycoMembersRequest);
-		if (apiResponse.getHeader().get("resultMessage").equals("SUCCESS")) {
-			return true;
-		} else {
-			return false;
-		}
+		return apiResponse.getHeader().get("resultMessage").equals("SUCCESS");
 	}
 
 	public PaycoLoginResponse paycoLogin(PaycoLoginRequest paycoLoginRequest) {
