@@ -1,6 +1,10 @@
 JWT 토큰 인증
 =============
-![스크린샷 2024-07-21 오전 4 01 57](https://github.com/user-attachments/assets/6e7b513f-4b21-4fde-8b2d-29f0aa25a080)
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/6c6e4597-0dd4-435c-bf1a-11a3256b9aaa" alt="스크린샷 2024-07-21 오전 4 31 20">
+</p>
+
 
 로그인 후
 ==========
