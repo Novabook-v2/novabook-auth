@@ -27,5 +27,7 @@ JWT 토큰 인증
 ### 리프레시 토큰
 
 * 액세스 토큰 만료시 리프레시 토큰으로 재발급
-* 
-![스크린샷 2024-07-21 오전 4 39 48](https://github.com/user-attachments/assets/fb11b674-2d04-4ce2-9cff-de53c18511ea)
+  
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/fb11b674-2d04-4ce2-9cff-de53c18511ea" alt="스크린샷 2024-07-21 오전 4 39 48">
+</p>
