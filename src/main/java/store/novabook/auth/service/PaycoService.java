@@ -48,8 +48,8 @@ public class PaycoService {
 		AccessTokenInfo paycoAccessTokenInfo = tokenService.createPaycoAccessTokenInfo(paycoMembers.getBody().id(),
 			paycoRefreshTokenInfo);
 
-		String accessToken = tokenProvider.createAccessToken(UUID.fromString(paycoRefreshTokenInfo.getUuid()));
-		String refreshToken = tokenProvider.createRefreshToken(UUID.fromString(paycoAccessTokenInfo.getUuid()));
+		String accessToken = tokenProvider.createAccessToken(UUID.fromString(paycoAccessTokenInfo.getUuid()));
+		String refreshToken = tokenProvider.createRefreshToken(UUID.fromString(paycoRefreshTokenInfo.getUuid()));
 
 		tokenService.saveTokens(paycoAccessTokenInfo, paycoRefreshTokenInfo);
 
