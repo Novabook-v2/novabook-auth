@@ -29,13 +29,12 @@ public class KeyManagerUtil {
 	private KeyManagerUtil() {
 	}
 
-	private static String getDataSource(Environment environment, String keyid) {
+	private static String getDataSource(Environment environment, String keyid, RestTemplate restTemplate) {
 
 		String appkey = environment.getProperty("nhn.cloud.keyManager.appkey");
 		String userId = environment.getProperty("nhn.cloud.keyManager.userAccessKey");
 		String secretKey = environment.getProperty("nhn.cloud.keyManager.secretAccessKey");
 
-		RestTemplate restTemplate = new RestTemplate();
 		String baseUrl = "https://api-keymanager.nhncloudservice.com/keymanager/v1.2/appkey/{appkey}/secrets/{keyid}";
 		String url = baseUrl.replace("{appkey}", Objects.requireNonNull(appkey)).replace("{keyid}", keyid);
 		HttpHeaders headers = new HttpHeaders();
@@ -75,10 +74,10 @@ public class KeyManagerUtil {
 	}
 
 
-	public static RedisConfigDto getRedisConfig(Environment environment) {
+	public static RedisConfigDto getRedisConfig(Environment environment, RestTemplate restTemplate) {
 		try {
 			String keyid = environment.getProperty("nhn.cloud.keyManager.redisKey");
-			return objectMapper.readValue(getDataSource(environment, keyid), RedisConfigDto.class);
+			return objectMapper.readValue(getDataSource(environment, keyid, restTemplate), RedisConfigDto.class);
 		} catch (JsonProcessingException e) {
 			//오류처리
 			log.error("RedisConfig{}", FAILED_CONVERSION.getMessage());
@@ -86,10 +85,10 @@ public class KeyManagerUtil {
 		}
 	}
 
-	public static JWTConfigDto getJWTConfig(Environment environment) {
+	public static JWTConfigDto getJWTConfig(Environment environment, RestTemplate restTemplate) {
 		try {
 			String keyid = environment.getProperty("nhn.cloud.keyManager.jwtKey");
-			return objectMapper.readValue(getDataSource(environment, keyid), JWTConfigDto.class);
+			return objectMapper.readValue(getDataSource(environment, keyid, restTemplate), JWTConfigDto.class);
 		} catch (JsonProcessingException e) {
 			//오류처리
 			log.error("JWTConfig{}", FAILED_CONVERSION.getMessage());
