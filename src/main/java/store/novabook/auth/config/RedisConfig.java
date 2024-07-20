@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,7 +28,8 @@ public class RedisConfig {
 
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
-		RedisConfigDto redisConfig = KeyManagerUtil.getRedisConfig(env);
+		RestTemplate restTemplate = new RestTemplate();
+		RedisConfigDto redisConfig = KeyManagerUtil.getRedisConfig(env, restTemplate);
 
 		RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
 		config.setHostName(redisConfig.host());
@@ -46,6 +48,4 @@ public class RedisConfig {
 		template.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
 		return template;
 	}
-
-
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -13,25 +14,23 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import store.novabook.auth.entity.AccessTokenInfo;
 import store.novabook.auth.util.KeyManagerUtil;
 import store.novabook.auth.util.dto.JWTConfigDto;
 
 @Component
+@RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
-
+	private final Environment env;
 	private Key key;
-
-	private final JWTConfigDto jwt;
 
 	private static final String UUID = "uuid";
 
-	public TokenProvider(Environment env) {
-		this.jwt = KeyManagerUtil.getJWTConfig(env);
-	}
-
 	@Override
 	public void afterPropertiesSet() {
+		RestTemplate restTemplate = new RestTemplate();
+		JWTConfigDto jwt = KeyManagerUtil.getJWTConfig(env, restTemplate);
 		byte[] keyBytes = Decoders.BASE64.decode(jwt.secret());
 		this.key = Keys.hmacShaKeyFor(keyBytes);
 	}
