@@ -1,3 +1,12 @@
+
+아키텍쳐
+========
+
+![노바북아키텍처 (1)](https://github.com/user-attachments/assets/b6ad1505-66b0-438d-98fd-e63e73f58207)
+
+
+
+
 JWT 토큰 인증
 =============
 
