@@ -31,9 +31,6 @@ Novabook-AuthServer
 로그인 후
 ==========
 ### 쿠키
-
-<br>
-
 * 브라우저의 쿠키에 토큰 저장
 ![스크린샷 2024-07-21 오전 4 09 29](https://github.com/user-attachments/assets/34614045-0d1c-49d3-a1a6-a206ef812fff)
 <br>
@@ -53,9 +50,6 @@ Novabook-AuthServer
 토큰 만료
 ==========
 ### 리프레시 토큰
-
-
-<br>
 
 * 액세스 토큰 만료시 리프레시 토큰으로 재발급
   
