@@ -64,7 +64,7 @@ public class KeyManagerUtil {
 		}
 
 		String result = (String)body.get("secret");
-		if (result.isEmpty()) {
+		if (Objects.isNull(result)||result.isEmpty()) {
 			log.error("\"secret\" key is missing in responsxcle body");
 			log.error("{}", body);
 			throw new KeyManagerException(MISSING_BODY_KEY);
