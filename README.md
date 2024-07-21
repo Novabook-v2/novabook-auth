@@ -1,5 +1,12 @@
 Novabook AuthServer
 ===========
+<p>
+  <img src="https://img.shields.io/badge/Spring%20Cloud-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=Redis&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat-square&logo=Spring%20Boot&logoColor=white"/>
+  <img src="https://img.shields.io/badge/JWT-000000?style=flat-square&logo=JSON%20web%20tokens&logoColor=white"/>
+</p>
 노바북 모든 인증 과정을 담당하는 서버입니다
 로그인시 인증서버에서 검증하고 JWT 토큰을 발급합니다 JWT토큰은 사용자의 권한을 나타내는 토큰으로 UUID값으로 토큰을 발급합니다
 
