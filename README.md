@@ -6,28 +6,37 @@ Novabook-AuthServer
 * 비공개 변수
  * UUID를 활용하여 사용자가 토큰 내부 정보를 확인해도 알 수 없는 값을 저장
 
+<br>
+
 아키텍쳐
 ========
 
+<br>
+
 ![노바북아키텍처 (1)](https://github.com/user-attachments/assets/b6ad1505-66b0-438d-98fd-e63e73f58207)
 
-
-
+<br>
 
 로그인 인증 과정
 =============
+
+<br>
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/6c6e4597-0dd4-435c-bf1a-11a3256b9aaa" alt="스크린샷 2024-07-21 오전 4 31 20">
 </p>
 
+<br>
 
 로그인 후
 ==========
 ### 쿠키
+
+<br>
+
 * 브라우저의 쿠키에 토큰 저장
 ![스크린샷 2024-07-21 오전 4 09 29](https://github.com/user-attachments/assets/34614045-0d1c-49d3-a1a6-a206ef812fff)
-
+<br>
 
 토큰 내부 정보
 ============
@@ -35,16 +44,18 @@ Novabook-AuthServer
 * UUID를 활용한 유저 정보 암호화
 * 레디스에 정보 저장
 
-
-
 ![스크린샷 2024-07-21 오전 4 11 07](https://github.com/user-attachments/assets/11d4a5c0-ab04-4e3e-8a0a-6c58995002ad)
 
+<br>
 
 
 
 토큰 만료
 ==========
 ### 리프레시 토큰
+
+
+<br>
 
 * 액세스 토큰 만료시 리프레시 토큰으로 재발급
   
