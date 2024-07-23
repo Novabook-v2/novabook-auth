@@ -127,7 +127,7 @@ public class TokenService {
 
 	public AccessTokenInfo createAccessTokenInfo(CustomUserDetails principal, RefreshTokenInfo refreshTokenInfo) {
 		Date now = new Date();
-		Date accessValidity = new Date(now.getTime() + 300 * 1000);
+		Date accessValidity = new Date(now.getTime() + 3000 * 1000);
 
 		String accessTokenUUID = UUID.randomUUID().toString();
 
@@ -138,7 +138,7 @@ public class TokenService {
 
 	public AccessTokenInfo createAccessTokenInfo(RefreshTokenInfo refreshTokenInfo) {
 		Date now = new Date();
-		Date accessValidity = new Date(now.getTime() + 300 * 1000);
+		Date accessValidity = new Date(now.getTime() + 3000 * 1000);
 
 		String accessTokenUUID = UUID.randomUUID().toString();
 
@@ -160,7 +160,7 @@ public class TokenService {
 
 	public AccessTokenInfo createPaycoAccessTokenInfo(long membersId, RefreshTokenInfo refreshTokenInfo) {
 		Date now = new Date();
-		Date accessValidity = new Date(now.getTime() + 300 * 1000);
+		Date accessValidity = new Date(now.getTime() + 3000 * 1000);
 
 		String accessTokenUUID = UUID.randomUUID().toString();
 
