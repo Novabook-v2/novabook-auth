@@ -26,7 +26,8 @@ public class TokenService {
 
 	private final RedisTemplate<String, Object> redisTemplate;
 	private final ObjectMapper objectMapper;
-
+	private static final Long ACCESS_TOKEN_EXPIRATION_TIME = 3600 * 3 * 1000L;
+	private static final Long REFRESH_TOKEN_EXPIRATION_TIME = 86400 * 1000L;
 
 	public void saveTokens(AccessTokenInfo accessTokenInfo, RefreshTokenInfo refreshTokenInfo) {
 		LocalDateTime now = LocalDateTime.now();
@@ -74,7 +75,6 @@ public class TokenService {
 		redisTemplate.opsForValue().set(refreshToken.getUuid(), refreshToken, refreshTokenDuration);
 	}
 
-
 	public void deleteAllTokensByAccessToken(String accessTokenUUID) {
 		AccessTokenInfo accessTokenInfo = getAccessToken(accessTokenUUID);
 
@@ -87,7 +87,6 @@ public class TokenService {
 	public boolean existsByUuid(String uuid) {
 		return Boolean.TRUE.equals(redisTemplate.hasKey(uuid));
 	}
-
 
 	public void saveDormant(DormantMembers dormantMembers) {
 		if (Boolean.TRUE.equals(redisTemplate.hasKey(dormantMembers.getUuid()))) {
@@ -116,7 +115,7 @@ public class TokenService {
 
 	public RefreshTokenInfo createRefreshTokenInfo(CustomUserDetails principal) {
 		Date now = new Date();
-		Date refreshValidity = new Date(now.getTime() + 12000 * 1000);
+		Date refreshValidity = new Date(now.getTime() + REFRESH_TOKEN_EXPIRATION_TIME);
 
 		String refreshTokenUUID = UUID.randomUUID().toString();
 
@@ -127,7 +126,7 @@ public class TokenService {
 
 	public AccessTokenInfo createAccessTokenInfo(CustomUserDetails principal, RefreshTokenInfo refreshTokenInfo) {
 		Date now = new Date();
-		Date accessValidity = new Date(now.getTime() + 3000 * 1000);
+		Date accessValidity = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION_TIME);
 
 		String accessTokenUUID = UUID.randomUUID().toString();
 
@@ -138,7 +137,7 @@ public class TokenService {
 
 	public AccessTokenInfo createAccessTokenInfo(RefreshTokenInfo refreshTokenInfo) {
 		Date now = new Date();
-		Date accessValidity = new Date(now.getTime() + 3000 * 1000);
+		Date accessValidity = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION_TIME);
 
 		String accessTokenUUID = UUID.randomUUID().toString();
 
@@ -149,7 +148,7 @@ public class TokenService {
 
 	public RefreshTokenInfo createPaycoRefreshTokenInfo(long membersId) {
 		Date now = new Date();
-		Date refreshValidity = new Date(now.getTime() + 12000 * 1000);
+		Date refreshValidity = new Date(now.getTime() + REFRESH_TOKEN_EXPIRATION_TIME);
 
 		String refreshTokenUUID = UUID.randomUUID().toString();
 
@@ -160,7 +159,7 @@ public class TokenService {
 
 	public AccessTokenInfo createPaycoAccessTokenInfo(long membersId, RefreshTokenInfo refreshTokenInfo) {
 		Date now = new Date();
-		Date accessValidity = new Date(now.getTime() + 3000 * 1000);
+		Date accessValidity = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION_TIME);
 
 		String accessTokenUUID = UUID.randomUUID().toString();
 
