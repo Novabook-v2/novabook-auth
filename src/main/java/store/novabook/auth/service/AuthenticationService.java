@@ -1,12 +1,9 @@
 package store.novabook.auth.service;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +19,7 @@ import store.novabook.auth.dto.request.GetNewTokenRequest;
 import store.novabook.auth.dto.request.IsExpireAccessTokenRequest;
 import store.novabook.auth.dto.request.LoginMembersRequest;
 import store.novabook.auth.dto.response.GetDormantMembersResponse;
+import store.novabook.auth.dto.response.GetMembersRoleResponse;
 import store.novabook.auth.dto.response.GetMembersStatusResponse;
 import store.novabook.auth.dto.response.GetNewTokenResponse;
 import store.novabook.auth.dto.response.IsExpireAccessTokenResponse;
@@ -133,6 +131,15 @@ public class AuthenticationService {
 			return new GetMembersStatusResponse(getDormantMembersResponse.getBody().memberStatusId(), null);
 		}
 		return new GetMembersStatusResponse(getDormantMembersResponse.getBody().memberStatusId(), null);
+	}
+
+	public GetMembersRoleResponse getMembersRole(String accessToken) {
+		String uuid = tokenProvider.getUUID(accessToken);
+		AccessTokenInfo accessTokenInfo = tokenService.getAccessToken(uuid);
+		if (accessTokenInfo == null) {
+			return new GetMembersRoleResponse("NOTFOUND");
+		}
+		return new GetMembersRoleResponse(accessTokenInfo.getRole());
 	}
 
 }

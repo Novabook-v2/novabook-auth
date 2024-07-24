@@ -55,7 +55,7 @@ public class SecurityConfig {
 				.requestMatchers("/", "/auth/login", "/auth/members/uuid", "/auth/refresh", "/auth/admin/login",
 					"/auth/members/token", "/auth/logout", "/auth/payco", "/auth/members/status",
 					"/auth/members/uuid/dormant",
-					"/auth/payco/link", "/auth/expire").permitAll()
+					"/auth/payco/link", "/auth/expire", "/auth/role").permitAll()
 				.anyRequest().authenticated())
 			.sessionManagement(session -> session
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
