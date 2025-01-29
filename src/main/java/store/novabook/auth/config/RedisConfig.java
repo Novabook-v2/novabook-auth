@@ -16,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
-import store.novabook.auth.util.KeyManagerUtil;
 import store.novabook.auth.util.dto.RedisConfigDto;
 
 @Configuration
@@ -28,14 +27,10 @@ public class RedisConfig {
 
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
-		RestTemplate restTemplate = new RestTemplate();
-		RedisConfigDto redisConfig = KeyManagerUtil.getRedisConfig(env, restTemplate);
-
 		RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
-		config.setHostName(redisConfig.host());
-		config.setPort(redisConfig.port());
-		config.setPassword(RedisPassword.of(redisConfig.password()));
-		config.setDatabase(redisConfig.database());
+		config.setHostName("localhost");
+		config.setPort(6379);
+		config.setPassword("default");
 
 		return new LettuceConnectionFactory(config);
 	}

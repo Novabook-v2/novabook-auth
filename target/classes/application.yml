@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: auth-service
+
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      format_sql: true
+      use_sql_comments: true
+      highlight_sql: true
+      auto_quote_keyword: true
+
+  data:
+    redis:
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 10
+          min-idle: 2
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+    org.hibernate.orm.jdbc.bind: trace
+    org.springframework.transaction.interceptor: trace
+
+server:
+  port: 8778
+
+
+  #키 매니저
+nhn:
+  cloud:
+    keyManager:
+      appkey: 2SxwmBzUfnqJaA2A
+      redisKey: 83d9f2929dc849fb89bee961250b1676
+      jwtKey: d9743d803f0441ffa8e242032647db41
+      userAccessKey: J9VxQFQEsmerR1n7FeJ6
+      secretAccessKey: zZEVopUHt6dxgRMt
+
