@@ -1,6 +1,5 @@
 package store.novabook.auth.jwt;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.UUID;
 
@@ -22,12 +21,13 @@ import store.novabook.auth.entity.AccessTokenInfo;
 public class TokenProvider implements InitializingBean {
 	private final Environment env;
 	private Key key;
-
 	private static final String UUID = "uuid";
 
 	@Override
 	public void afterPropertiesSet() {
-		this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+		String secret = env.getProperty("JWT-SECRET");
+		byte[] keyBytes = Decoders.BASE64.decode(secret);
+		this.key = Keys.hmacShaKeyFor(keyBytes);
 	}
 
 	public String createAccessToken(UUID uuid) {

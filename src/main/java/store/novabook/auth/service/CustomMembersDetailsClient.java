@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.validation.Valid;
-import store.novabook.auth.dto.request.GetDormantMembersRequest;
-import store.novabook.auth.dto.response.GetDormantMembersResponse;
-import store.novabook.auth.dto.request.GetPaycoMembersRequest;
-import store.novabook.auth.dto.response.GetPaycoMembersResponse;
-import store.novabook.auth.dto.request.LinkPaycoMembersRequest;
-import store.novabook.auth.response.ApiResponse;
-import store.novabook.auth.dto.response.FindMemberLoginResponse;
 import store.novabook.auth.dto.request.FindMembersRequest;
+import store.novabook.auth.dto.request.GetDormantMembersRequest;
+import store.novabook.auth.dto.request.GetPaycoMembersRequest;
+import store.novabook.auth.dto.request.LinkPaycoMembersRequest;
+import store.novabook.auth.dto.response.FindMemberLoginResponse;
+import store.novabook.auth.dto.response.GetDormantMembersResponse;
+import store.novabook.auth.dto.response.GetPaycoMembersResponse;
+import store.novabook.auth.response.ApiResponse;
 
 @FeignClient(name = "gateway-service", path = "/api/v1/store/members", contextId = "customMembersDetailsClient")
 public interface CustomMembersDetailsClient {

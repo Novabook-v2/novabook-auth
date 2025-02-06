@@ -22,8 +22,7 @@ public class SecurityConfig {
 
 	private final CustomMembersDetailsService customMembersDetailsService;
 
-	public SecurityConfig(
-		CustomMembersDetailsService customMembersDetailsService) {
+	public SecurityConfig(CustomMembersDetailsService customMembersDetailsService) {
 		this.customMembersDetailsService = customMembersDetailsService;
 	}
 
@@ -47,18 +46,17 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-			.csrf(AbstractHttpConfigurer::disable)
+		http.csrf(AbstractHttpConfigurer::disable)
 			.formLogin(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)
-			.authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/", "/auth/login", "/auth/members/uuid", "/auth/refresh", "/auth/admin/login",
-					"/auth/members/token", "/auth/logout", "/auth/payco", "/auth/members/status",
-					"/auth/members/uuid/dormant",
-					"/auth/payco/link", "/auth/expire", "/auth/role").permitAll()
-				.anyRequest().authenticated())
-			.sessionManagement(session -> session
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+			.authorizeHttpRequests(
+				authorize -> authorize.requestMatchers("/", "/auth/login", "/auth/members/uuid", "/auth/refresh",
+						"/auth/admin/login", "/auth/members/token", "/auth/logout", "/auth/payco", "/auth/members/status",
+						"/auth/members/uuid/dormant", "/auth/payco/link", "/auth/expire", "/auth/role")
+					.permitAll()
+					.anyRequest()
+					.authenticated())
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		return http.build();
 	}

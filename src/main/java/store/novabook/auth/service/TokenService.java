@@ -33,6 +33,7 @@ public class TokenService {
 		LocalDateTime now = LocalDateTime.now();
 		Duration accessTokenDuration = Duration.between(now, accessTokenInfo.getExpirationTime());
 		Duration refreshTokenDuration = Duration.between(now, refreshTokenInfo.getExpirationTime());
+		refreshTokenInfo.setAccessTokenUUID(accessTokenInfo.getUuid());
 		redisTemplate.opsForValue().set(accessTokenInfo.getUuid(), accessTokenInfo, accessTokenDuration);
 		redisTemplate.opsForValue().set(refreshTokenInfo.getUuid(), refreshTokenInfo, refreshTokenDuration);
 	}

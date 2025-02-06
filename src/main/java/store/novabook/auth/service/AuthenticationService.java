@@ -34,6 +34,8 @@ import store.novabook.auth.response.ApiResponse;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+	public static final int UNSUBSCRIBE = 3;
+	public static final int DORMANCY = 2;
 	private final AuthenticationManager authenticationManager;
 	private final TokenProvider tokenProvider;
 	private final TokenService tokenService;
@@ -118,18 +120,23 @@ public class AuthenticationService {
 
 		ApiResponse<GetDormantMembersResponse> getDormantMembersResponse = customMembersDetailsClient.getMemberDormantStatus(
 			getDormantMembersRequest);
+
+		//check Member status
 		if (getDormantMembersResponse == null || getDormantMembersResponse.getBody() == null) {
 			return new GetMembersStatusResponse(0L, null);
 		}
-		if (getDormantMembersResponse.getBody().memberStatusId() == 2) {
+
+		if (getDormantMembersResponse.getBody().memberStatusId() == DORMANCY) {
 			DormantMembers dormantMembers = DormantMembers.of(uuid, membersId);
 			tokenService.saveDormant(dormantMembers);
 			return new GetMembersStatusResponse(getDormantMembersResponse.getBody().memberStatusId(), uuid);
 		}
-		if (getDormantMembersResponse.getBody().memberStatusId() == 3) {
+
+		if (getDormantMembersResponse.getBody().memberStatusId() == UNSUBSCRIBE) {
 			tokenService.deleteAllTokensByAccessToken(uuid);
 			return new GetMembersStatusResponse(getDormantMembersResponse.getBody().memberStatusId(), null);
 		}
+
 		return new GetMembersStatusResponse(getDormantMembersResponse.getBody().memberStatusId(), null);
 	}
 
