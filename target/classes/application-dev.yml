@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+###Local용 임시
+redis-host: "localhost"
+redis-port: 6379
+redis-password: "default"
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka

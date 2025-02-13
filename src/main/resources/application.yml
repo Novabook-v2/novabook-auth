@@ -1,14 +1,10 @@
-###Local용 임시
-redis-host: "localhost"
-redis-port: 6379
-redis-password: "default"
-
-
 JWT-SECRET : seheegoodseheegoodseheegoodseheegoodseheegoodseheegoodseheegoodseheegoodseheegoodseheegood
 
 spring:
   application:
     name: auth-service
+  profiles:
+    active: prod
 
   jpa:
     open-in-view: false
@@ -28,14 +24,6 @@ spring:
           max-active: 10
           max-idle: 10
           min-idle: 2
-
-
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://127.0.0.1:8761/eureka
 
 logging:
   level:
